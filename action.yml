@@ -1,6 +1,6 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Check outdated .NET packages
+description: Check outdated .NET packages
+author: Gavan Lamb
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +9,49 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  add-comment-to-pr:
+    description: Specifies whether to add a comment to the PR with the outdated packages report
+    required: false
+    default: 'false'
+  comment-key:
+    description: Unique identifier for the github comment
+    required: false
+    default: 'dotnet-outdated'
+  add-check-run:
+    description: Specifies whether to add a check run to the GitHub Actions run
+    required: false
+    default: 'false'
+  fail-check-run-if-contains-outdated:
+    description: If there are outdated packages fail the check. This requires `add-check-run` to be true
+    required: false
+    default: 'false'
+  check-run-name:
+    description: Name of the check run tab. If not supplied the head ref will be used.
+    required: false
+  include-transitive-dependencies:
+    description: Lists transitive and top-level packages
+    required: false
+  include-prerelease-dependencies:
+    description: Consider packages with prerelease versions when searching for newer packages
+    required: false
+  highest-patch:
+    description: Consider only the packages with a matching major and minor version numbers when searching for newer packages
+    required: false
+  highest-minor:
+    description: Consider only the packages with a matching major version number when searching for newer packages
+    required: false
+  nuget-sources:
+    description: The NuGet sources to use when searching for newer packages. To specify more than one use a comma separated value
+    required: false
+  nuget-config-file-path:
+    description: The path to the NuGet config file to use.
+    required: false
+  frameworks:
+    description: Chooses a framework to show its packages. To specify more than one use a comma separated value
+    required: false
+  target:
+    description: The project or solution file to operate on. If a file is not specified, the command will search the current directory for one.
+    required: false
 
 runs:
   using: node20
