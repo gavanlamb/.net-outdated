@@ -130,7 +130,7 @@ describe('getIntegerInput', () => {
         [undefined],
         [''],
         [null]
-    ])('should return null when the input is "%s"', async ( value) => {
+    ])('should return null when the input is "%s"', async (value) => {
         const name = "inputName";
 
         const debugMock = jest.fn();
