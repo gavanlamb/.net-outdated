@@ -45,12 +45,20 @@ jobs:
         run: |
           npm run test
 
-      - name: Publish Test Results
+      - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: |
             ./test-results/junit.xml
+
+      - name: Publish test coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: always()
+        with:
+          skip-step: all
+          coverage-file: ./coverage/coverage-summary.json
+          prnumber: ${{ github.event.pull_request.number }}
 
       - name: Package
         run: |
