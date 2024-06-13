@@ -1,0 +1,34 @@
+name: 'Update Jira issue status'
+
+on:
+  pull_request:
+    types:
+      - closed
+      - opened
+      - reopened
+
+concurrency:
+  cancel-in-progress: false
+  group: jira-update-status-${{ github.ref_name }}
+
+jobs:
+  update:
+    name: Update Jira issue status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issue details
+        uses: gavanlamb/github-actions/.github/actions/jira/get-issue-details@main
+        id: get-issue-details
+        with:
+          base-url: https://gavanlamb-team-1vid7fblvall.atlassian.net
+          user-email: mail@gavanlamb.com
+          api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Update issue details
+        uses: gavanlamb/github-actions/.github/actions/jira/change-issue-status@main
+        if: ${{ steps.get-issue-details.outputs.type == 'subtask' }}
+        with:
+          base-url: https://gavanlamb-team-1vid7fblvall.atlassian.net
+          user-email: mail@gavanlamb.com
+          api-token: ${{ secrets.JIRA_API_TOKEN }}
+          identifier: ${{ steps.get-issue-details.outputs.identifier }}
+          status: ${{ github.event.action == 'closed' && 'Done' || 'Review' }}
