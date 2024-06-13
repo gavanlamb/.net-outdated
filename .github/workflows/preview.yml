@@ -1,0 +1,60 @@
+name: 'Pull request: opened'
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+concurrency:
+  cancel-in-progress: false
+  group: preview-${{ github.ref_name }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Get version
+        uses: gavanlamb/github-actions/.github/actions/version/get@main
+        id: get-version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Set version
+        run: |
+          npm version --no-git-tag-version 1.2.3
+
+      - name: Restore dependencies
+        run: |
+          npm ci
+
+      - name: Lint
+        run: |
+          npm run lint
+
+      - name: Test
+        run: |
+          npm run test
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            ./test-results/junit.xml
+
+      - name: Package
+        run: |
+          npm run package
