@@ -57,8 +57,8 @@ jobs:
         if: always()
         with:
           skip-step: all
-          coverage-file: ./coverage/coverage-summary.json
-          base-coverage-file: ./coverage/coverage-summary.json
+          coverage-file: ./test-results/summary.json
+          base-coverage-file: ./test-results/summary.json
           prnumber: ${{ github.event.pull_request.number }}
 
       - name: Package
