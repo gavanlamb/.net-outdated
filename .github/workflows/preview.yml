@@ -1,4 +1,4 @@
-name: 'Pull request: opened'
+name: 'Preview'
 
 on:
   pull_request:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Set version
         run: |
-          npm version --no-git-tag-version 1.2.3
+          npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.sem-ver }}
 
       - name: Restore dependencies
         run: |
