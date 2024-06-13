@@ -261,7 +261,7 @@ describe("addComment", () => {
         expect(warningMock).toHaveBeenCalledWith('This action cannot add a comment as the run is not for a PR');
     });
 
-    it("should use head ref name when comment-key is not supplied", async () => {
+    it("should use head ref name when pr-comment-name is not supplied", async () => {
         const body = null;
         const commentId = 2;
         const commentKey = null;
@@ -277,7 +277,7 @@ describe("addComment", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
         const getStringInputMock = jest.fn();
-        when(getStringInputMock).calledWith('comment-key').mockReturnValueOnce(commentKey);
+        when(getStringInputMock).calledWith('pr-comment-name').mockReturnValueOnce(commentKey);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
@@ -359,7 +359,7 @@ describe("addComment", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
         const getStringInputMock = jest.fn();
-        when(getStringInputMock).calledWith('comment-key').mockReturnValueOnce(commentKey);
+        when(getStringInputMock).calledWith('pr-comment-name').mockReturnValueOnce(commentKey);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
@@ -441,7 +441,7 @@ describe("addComment", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
         const getStringInputMock = jest.fn();
-        when(getStringInputMock).calledWith('comment-key').mockReturnValueOnce(commentKey);
+        when(getStringInputMock).calledWith('pr-comment-name').mockReturnValueOnce(commentKey);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
@@ -522,7 +522,7 @@ describe("addComment", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
         const getStringInputMock = jest.fn();
-        when(getStringInputMock).calledWith('comment-key').mockReturnValueOnce(commentKey);
+        when(getStringInputMock).calledWith('pr-comment-name').mockReturnValueOnce(commentKey);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
@@ -568,7 +568,7 @@ describe("addComment", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
         const getStringInputMock = jest.fn();
-        when(getStringInputMock).calledWith('comment-key').mockReturnValueOnce(commentKey);
+        when(getStringInputMock).calledWith('pr-comment-name').mockReturnValueOnce(commentKey);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });

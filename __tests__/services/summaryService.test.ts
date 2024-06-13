@@ -109,11 +109,11 @@ describe("getDetailedView", () => {
             "\n" +
             "| Package name | Type | Request version | Resolved version | Latest version | Severity |\n" +
             "|---|---|---:|---:|---:|---:|\n" +
-            "| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
-            "| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
-            "| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
-            "| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
-            "| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
+            "| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
+            "| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
+            "| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
+            "| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
+            "| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
             "| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |\n" +
             "| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |\n" +
             "| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |\n" +
@@ -130,11 +130,11 @@ describe("getDetailedView", () => {
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
-        expect(result).toContain("| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
-        expect(result).toContain("| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
-        expect(result).toContain("| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
-        expect(result).toContain("| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
-        expect(result).toContain("| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
+        expect(result).toContain("| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
+        expect(result).toContain("| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
+        expect(result).toContain("| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
+        expect(result).toContain("| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
+        expect(result).toContain("| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
         expect(result).toContain("| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |");
         expect(result).toContain("| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |");
         expect(result).toContain("| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |");
@@ -394,11 +394,11 @@ describe("getDetailedView", () => {
             "\n" +
             "| Package name | Type | Request version | Resolved version | Latest version | Severity |\n" +
             "|---|---|---:|---:|---:|---:|\n" +
-            "| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
-            "| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
-            "| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
-            "| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
-            "| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
+            "| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
+            "| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
+            "| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
+            "| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
+            "| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
             "\n" +
             "> __Note__\n" +
             ">\n" +
@@ -411,11 +411,11 @@ describe("getDetailedView", () => {
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
-        expect(result).toContain("| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
-        expect(result).toContain("| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
-        expect(result).toContain("| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
-        expect(result).toContain("| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
-        expect(result).toContain("| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
+        expect(result).toContain("| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
+        expect(result).toContain("| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
+        expect(result).toContain("| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
+        expect(result).toContain("| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
+        expect(result).toContain("| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
     });
 
     it("should return a detailed markdown view for a given configuration when transitivePackages is empty", async () => {
@@ -495,11 +495,11 @@ describe("getDetailedView", () => {
             "\n" +
             "| Package name | Type | Request version | Resolved version | Latest version | Severity |\n" +
             "|---|---|---:|---:|---:|---:|\n" +
-            "| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
-            "| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
-            "| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
-            "| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
-            "| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
+            "| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |\n" +
+            "| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |\n" +
+            "| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |\n" +
+            "| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |\n" +
+            "| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
             "\n" +
             "> __Note__\n" +
             ">\n" +
@@ -512,11 +512,11 @@ describe("getDetailedView", () => {
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
-        expect(result).toContain("| PackageA | Direct | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
-        expect(result).toContain("| PackageB | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
-        expect(result).toContain("| PackageC | Direct | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
-        expect(result).toContain("| PackageD | Direct | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
-        expect(result).toContain("| PackageE | Direct | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
+        expect(result).toContain("| PackageA | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{red}{\\textsf{2.0.0}}$ | Major |");
+        expect(result).toContain("| PackageB | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{red}{\\textsf{2.0.0}}$ | Premajor |");
+        expect(result).toContain("| PackageC | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Minor |");
+        expect(result).toContain("| PackageD | Top Level | 1.0.0-foo | 1.0.0-foo | $\\textcolor{yellow}{\\textsf{1.1.0}}$ | Preminor |");
+        expect(result).toContain("| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
     });
 
     it("should return a message indicating all frameworks contains no items", async () => {

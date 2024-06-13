@@ -1,6 +1,6 @@
 enum DependencyType {
     Transitive = "Transitive",
-    Direct = "Direct"
+    TopLevel = "Top Level"
 }
 
 export {
