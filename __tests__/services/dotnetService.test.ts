@@ -97,11 +97,11 @@ describe("listOutdatedPackages", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('include-transitive-dependencies', false).mockReturnValueOnce(includeTransitiveDependencies);
         when(getBooleanInputMock).calledWith('include-prerelease-dependencies', false).mockReturnValueOnce(includePrereleaseDependencies);
-        when(getBooleanInputMock).calledWith('highest-patch', false).mockReturnValueOnce(highestPatch);
-        when(getBooleanInputMock).calledWith('highest-minor', false).mockReturnValueOnce(highestMinor);
+        when(getBooleanInputMock).calledWith('include-highest-patch-only', false).mockReturnValueOnce(highestPatch);
+        when(getBooleanInputMock).calledWith('include-highest-minor-only', false).mockReturnValueOnce(highestMinor);
         const getStringArrayInputMock = jest.fn();
         when(getStringArrayInputMock).calledWith('nuget-sources').mockReturnValueOnce(nugetSources);
-        when(getStringArrayInputMock).calledWith('dotnet-framework').mockReturnValueOnce(dotnetFrameworks);
+        when(getStringArrayInputMock).calledWith('frameworks').mockReturnValueOnce(dotnetFrameworks);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringArrayInput: getStringArrayInputMock, getStringInput: getStringInputMock }));
 
         const getExecOutputMock = jest.fn();
@@ -114,8 +114,8 @@ describe("listOutdatedPackages", () => {
             '--outdated',
             '--include-transitive',
             '--include-prerelease',
-            '--highest-patch',
             '--highest-minor',
+            '--highest-patch',
             '--source source1',
             '--source source2',
             '--config nuget.config',
@@ -132,10 +132,10 @@ describe("listOutdatedPackages", () => {
         expect(getStringInputMock).toHaveBeenCalledWith('nuget-config-file-path');
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-transitive-dependencies', false);
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-prerelease-dependencies', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-patch', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-minor', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-patch-only', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
-        expect(getStringArrayInputMock).toHaveBeenCalledWith('dotnet-framework');
+        expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs);
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);
@@ -233,11 +233,11 @@ describe("listOutdatedPackages", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('include-transitive-dependencies', false).mockReturnValueOnce(includeTransitiveDependencies);
         when(getBooleanInputMock).calledWith('include-prerelease-dependencies', false).mockReturnValueOnce(includePrereleaseDependencies);
-        when(getBooleanInputMock).calledWith('highest-patch', false).mockReturnValueOnce(highestPatch);
-        when(getBooleanInputMock).calledWith('highest-minor', false).mockReturnValueOnce(highestMinor);
+        when(getBooleanInputMock).calledWith('include-highest-patch-only', false).mockReturnValueOnce(highestPatch);
+        when(getBooleanInputMock).calledWith('include-highest-minor-only', false).mockReturnValueOnce(highestMinor);
         const getStringArrayInputMock = jest.fn();
         when(getStringArrayInputMock).calledWith('nuget-sources').mockReturnValueOnce(nugetSources);
-        when(getStringArrayInputMock).calledWith('dotnet-framework').mockReturnValueOnce(dotnetFrameworks);
+        when(getStringArrayInputMock).calledWith('frameworks').mockReturnValueOnce(dotnetFrameworks);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringArrayInput: getStringArrayInputMock, getStringInput: getStringInputMock }));
 
         const getExecOutputMock = jest.fn();
@@ -258,10 +258,10 @@ describe("listOutdatedPackages", () => {
         expect(getStringInputMock).toHaveBeenCalledWith('nuget-config-file-path');
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-transitive-dependencies', false);
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-prerelease-dependencies', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-patch', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-minor', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-patch-only', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
-        expect(getStringArrayInputMock).toHaveBeenCalledWith('dotnet-framework');
+        expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs);
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);
@@ -290,11 +290,11 @@ describe("listOutdatedPackages", () => {
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('include-transitive-dependencies', false).mockReturnValueOnce(includeTransitiveDependencies);
         when(getBooleanInputMock).calledWith('include-prerelease-dependencies', false).mockReturnValueOnce(includePrereleaseDependencies);
-        when(getBooleanInputMock).calledWith('highest-patch', false).mockReturnValueOnce(highestPatch);
-        when(getBooleanInputMock).calledWith('highest-minor', false).mockReturnValueOnce(highestMinor);
+        when(getBooleanInputMock).calledWith('include-highest-patch-only', false).mockReturnValueOnce(highestPatch);
+        when(getBooleanInputMock).calledWith('include-highest-minor-only', false).mockReturnValueOnce(highestMinor);
         const getStringArrayInputMock = jest.fn();
         when(getStringArrayInputMock).calledWith('nuget-sources').mockReturnValueOnce(nugetSources);
-        when(getStringArrayInputMock).calledWith('dotnet-framework').mockReturnValueOnce(dotnetFrameworks);
+        when(getStringArrayInputMock).calledWith('frameworks').mockReturnValueOnce(dotnetFrameworks);
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringArrayInput: getStringArrayInputMock, getStringInput: getStringInputMock }));
 
         const getExecOutputMock = jest.fn();
@@ -316,10 +316,10 @@ describe("listOutdatedPackages", () => {
         expect(getStringInputMock).toHaveBeenCalledWith('nuget-config-file-path');
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-transitive-dependencies', false);
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-prerelease-dependencies', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-patch', false);
-        expect(getBooleanInputMock).toHaveBeenCalledWith('highest-minor', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-patch-only', false);
+        expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
-        expect(getStringArrayInputMock).toHaveBeenCalledWith('dotnet-framework');
+        expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs);
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);

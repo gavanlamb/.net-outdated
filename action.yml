@@ -2,55 +2,49 @@ name: Check outdated .NET packages
 description: Check outdated .NET packages
 author: Gavan Lamb
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'arrow-up-circle'
+  color: 'orange'
 
-# Define your inputs here.
 inputs:
-  add-comment-to-pr:
-    description: Specifies whether to add a comment to the PR with the outdated packages report
+  add-pr-comment:
+    description: A flag to indicate whether to add a comment to the associated PR with a report of the outdated packages. If this is enabled and the action is executed for a non-pull-request build then the comment will not be added.
     required: false
-    default: 'false'
-  comment-key:
-    description: Unique identifier for the github comment
+  pr-comment-name:
+    description: A unique suffix for the pull-request comment for the current run.
     required: false
-    default: 'dotnet-outdated'
   add-check-run:
-    description: Specifies whether to add a check run to the GitHub Actions run
+    description: A flag to indicate whether to add a check run, to the action, containing a report of the outdated packages.
     required: false
-    default: 'false'
   fail-check-run-if-contains-outdated:
-    description: If there are outdated packages fail the check. This requires `add-check-run` to be true
+    description: A flag to indicate whether the check run should fail if there are any direct dependencies that are out of date. In order for this to work the check run needs to be enabled by setting `add-check-run` to be true.
     required: false
-    default: 'false'
   check-run-name:
-    description: Name of the check run tab. If not supplied the head ref will be used.
+    description: A unique name for the check run tab.
     required: false
   include-transitive-dependencies:
-    description: Lists transitive and top-level packages
+    description: A flag to indicate whether to include transitive and top-level packages.
     required: false
   include-prerelease-dependencies:
-    description: Consider packages with prerelease versions when searching for newer packages
+    description: A flag to indicate whether to include prerelease packages as the target.
     required: false
-  highest-patch:
-    description: Consider only the packages with a matching major and minor version numbers when searching for newer packages
+  include-highest-minor-only:
+    description: A flag to indicate whether to consider only the packages with a matching major version number when searching for newer packages.
     required: false
-  highest-minor:
-    description: Consider only the packages with a matching major version number when searching for newer packages
+  include-highest-patch-only:
+    description: A flag to indicate whether to consider only the packages with a matching major and minor version numbers when searching for newer packages.
     required: false
   nuget-sources:
-    description: The NuGet sources to use when searching for newer packages. To specify more than one use a comma separated value
+    description: The NuGet sources to use when searching for newer packages. To specify more than one use a comma separated value.
     required: false
   nuget-config-file-path:
     description: The path to the NuGet config file to use.
     required: false
   frameworks:
-    description: Chooses a framework to show its packages. To specify more than one use a comma separated value
+    description: The framework or frameworks to run the command for. To specify more than one use a comma separated value.
     required: false
   target:
-    description: The project or solution file to operate on. If a file is not specified, the command will search the current directory for one.
+    description: The project or solution file to target. If a file is not specified, the command will search the current directory for one.
     required: false
 
 runs:

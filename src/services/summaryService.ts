@@ -51,7 +51,7 @@ function getDetailedView(
                 dependencies.push(
                     {
                         ...topLevelPackage,
-                        type: DependencyType.Direct,
+                        type: DependencyType.TopLevel,
                         versionDifference: semverDiff.default(topLevelPackage.requestedVersion!, topLevelPackage.latestVersion)
                     }
                 );

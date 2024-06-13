@@ -142,7 +142,7 @@ async function addComment(
         const issueNumber = pullRequest.number;
         debug(`issueNumber: ${issueNumber}`);
 
-        const suffix = getStringInput('comment-key') ?? pullRequest.head.ref;
+        const suffix = getStringInput('pr-comment-name') ?? pullRequest.head.ref;
         debug(`suffix: ${suffix}`);
 
         const messageId = `<!-- dotnet-outdated-comment:${suffix} -->`;

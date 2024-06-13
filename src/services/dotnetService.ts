@@ -47,22 +47,22 @@ function getIncludePrereleaseDependenciesArgument(): string {
 }
 
 /**
- * Gets the highest-patch argument from the action.
+ * Gets the include-highest-patch-only argument from the action.
  * @returns --highest-patch if the argument is true.
  */
-function getHighestPatchArgument(): string {
-    const value = getBooleanInput('highest-patch', false);
+function getIncludeHighestPatchOnlyArgument(): string {
+    const value = getBooleanInput('include-highest-patch-only', false);
     if (value)
         return '--highest-patch';
     return '';
 }
 
 /**
- * Gets the highest-minor argument from the action.
+ * Gets the include-highest-minor-only argument from the action.
  * @return --highest-patch if the argument is true.
  */
-function getHighestMinorArgument(): string {
-    const value = getBooleanInput('highest-minor', false);
+function getIncludeHighestMinorOnlyArgument(): string {
+    const value = getBooleanInput('include-highest-minor-only', false);
     if (value)
         return '--highest-minor';
     return '';
@@ -96,8 +96,8 @@ function getNuGetConfigArgument(): string {
  * Gets an array of NuGet package source arguments from the action
  * @returns an array of --framework {framework} if the argument is set.
  */
-function getDotnetFrameworkArguments(): string[] {
-    const values = getStringArrayInput('dotnet-framework');
+function getFrameworkArguments(): string[] {
+    const values = getStringArrayInput('frameworks');
     const sources: string[] = [];
     for (const value of values){
         sources.push(`--framework ${value}`);
@@ -116,11 +116,11 @@ async function listOutdatedPackages(): Promise<Configuration> {
         '--outdated',
         getIncludeTransitiveDependenciesArgument(),
         getIncludePrereleaseDependenciesArgument(),
-        getHighestPatchArgument(),
-        getHighestMinorArgument(),
+        getIncludeHighestMinorOnlyArgument(),
+        getIncludeHighestPatchOnlyArgument(),
         ...getNuGetSourceArguments(),
         getNuGetConfigArgument(),
-        ...getDotnetFrameworkArguments(),
+        ...getFrameworkArguments(),
         '--format json',
         '--verbosity q'
     ].filter(arg => arg !== '');
