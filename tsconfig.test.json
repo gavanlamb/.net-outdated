@@ -6,6 +6,6 @@
     "noEmit": true,
     "verbatimModuleSyntax": false
   },
-  "include": ["./__tests__/**/*", "./src/**/*"],
+  "include": ["./__tests__/**/*", "./src/**/*", "jest.config.ts"],
   "exclude": ["./dist", "./node_modules", "./coverage"]
 }
