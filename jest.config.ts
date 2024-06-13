@@ -1,8 +1,9 @@
 import { basename, extname } from 'node:path';
+import type { Config } from '@jest/types';
 
-export default {
-    preset: 'ts-jest',
+const config: Config.InitialOptions = {
     verbose: true,
+    rootDir: './',
     testEnvironment: 'node',
     moduleFileExtensions: ['js', 'ts'],
     testMatch: ['**/*.test.ts'],
@@ -10,7 +11,6 @@ export default {
     transform: {
         '^.+\\.ts$': 'ts-jest'
     },
-    coverageReporters: ['json-summary', 'text', 'lcov'],
     collectCoverage: true,
     collectCoverageFrom: ['./src/**'],
     reporters: [
@@ -27,3 +27,5 @@ export default {
         }]
     ]
 };
+
+export default config;
