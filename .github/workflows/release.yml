@@ -5,7 +5,7 @@ on:
 
 concurrency:
   cancel-in-progress: false
-  group: preview-${{ github.ref_name }}
+  group: release-${{ github.ref_name }}
 
 jobs:
   build:
@@ -24,19 +24,14 @@ jobs:
           node-version-file: .node-version
 
       - name: Get version
+        uses: gavanlamb/github-actions/.github/actions/version/get@main
         id: get-version
-        uses: gittools/actions/gitversion/execute@v1.1.1
-        with:
-          targetPath: ./
-          disableCache: true
-          useConfigFile: true
-          configFilePath: GitVersion.yml
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
       - name: Set version
         run: |
-          npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.semVer }}
+          npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.sem-ver }}
 
       - name: Restore dependencies
         run: |
