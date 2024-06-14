@@ -61,3 +61,15 @@ steps:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+
+## Changes
+### Branching strategy
+This repository uses [GitHub Flow](https://githubflow.github.io/) as the branching strategy. 
+TODO: update the 
+
+### Commit messages
+Commit messages for this repository follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
+
+The versioning of this repository follows [Semantic Versioning](https://semver.org/) and the version is
