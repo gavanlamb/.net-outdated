@@ -1,7 +1,9 @@
 name: 'Preview'
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 concurrency:
   cancel-in-progress: false
@@ -23,27 +25,32 @@ jobs:
         with:
           node-version-file: .node-version
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: '5.x'
       - name: Get version
-        uses: gavanlamb/github-actions/.github/actions/version/get@main
         id: get-version
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          targetPath: ./
+          disableCache: true
+          useConfigFile: true
+          configFilePath: GitVersion.yml
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
       - name: Set version
-        run: |
-          npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.sem-ver }}
+        run: npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.semVer }}
 
       - name: Restore dependencies
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Lint
-        run: |
-          npm run lint
+        run: npm run lint
 
       - name: Test
-        run: |
-          npm run test
+        run: npm run test
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -59,8 +66,6 @@ jobs:
           skip-step: all
           coverage-file: ./test-results/summary.json
           base-coverage-file: ./test-results/summary.json
-          prnumber: ${{ github.event.pull_request.number }}
 
       - name: Package
-        run: |
-          npm run package
+        run: npm run package

@@ -5,7 +5,7 @@ on:
 
 concurrency:
   cancel-in-progress: false
-  group: preview-${{ github.ref_name }}
+  group: release-${{ github.ref_name }}
 
 jobs:
   build:
@@ -23,6 +23,10 @@ jobs:
         with:
           node-version-file: .node-version
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: '5.x'
       - name: Get version
         id: get-version
         uses: gittools/actions/gitversion/execute@v1.1.1
