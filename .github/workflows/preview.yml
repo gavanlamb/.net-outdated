@@ -77,6 +77,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs:
       - build
     env:
@@ -89,11 +91,12 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - name: Create and push tag
-        uses: thejeff77/action-push-tag@v1.0.0
-        with:
-          tag: ${{ env.tag }}
-          message: '${{ env.tag }}'
-          ref: ${{ github.head_ref }}
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}
+          git tag -a ${{ env.tag }} -m "${{ env.tag }}}"
+          git push origin tag ${{ env.tag }}
       - name: Create release notes
         uses: mikepenz/release-changelog-builder-action@v5.0.0-a02
         id: create-release-notes
