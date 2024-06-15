@@ -73,9 +73,14 @@ jobs:
       - name: Package
         run: npm run package
 
-      # Check to see if there are changes in the dist/ folder
-      # if there are then fail the pipeline because it should not be the case
-      # the developer should have run the package command before pushing
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
+        with:
+          fail-if-changed: true
+          fail-message: Files in dist are not up-to-date. Please run 'npm run package' locally and commit the changes.
+          files: |
+            dist
 
       - name: Push changes
         uses: ad-m/github-push-action@master
