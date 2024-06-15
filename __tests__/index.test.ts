@@ -1,17 +1,15 @@
-/**
- * Unit tests for the action's entrypoint, src/index.ts
- */
+describe("default", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.resetModules();
+    });
 
-import * as main from '../src/main'
+    it("should call run when loaded", async () => {
+        const runMock = jest.fn();
+        jest.doMock("../src/services/outdatedService", () => ({ run: runMock }));
 
-// Mock the action's entrypoint
-const runMock = jest.spyOn(main, 'run').mockImplementation()
+        await import("../src/index");
 
-describe('index', () => {
-  it('calls run when imported', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require('../src/index')
-
-    expect(runMock).toHaveBeenCalled()
-  })
-})
+        expect(runMock).toHaveBeenCalledTimes(1);
+    });
+});
