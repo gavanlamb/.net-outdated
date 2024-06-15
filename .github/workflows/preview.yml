@@ -40,19 +40,16 @@ jobs:
 
       - name: Set version
         run: |
-          npm version ${{ steps.get-version.outputs.semVer }}
+          npm version ${{ steps.get-version.outputs.semVer }} -m "chore: [skip-ci] set version to %s"
 
       - name: Restore dependencies
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Lint
-        run: |
-          npm run lint
+        run: npm run lint
 
       - name: Test
-        run: |
-          npm run test
+        run: npm run test
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -71,5 +68,11 @@ jobs:
           prnumber: ${{ github.event.pull_request.number }}
 
       - name: Package
-        run: |
-          npm run package
+        run: npm run package
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: false
