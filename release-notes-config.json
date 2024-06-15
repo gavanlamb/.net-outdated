@@ -1,0 +1,85 @@
+{
+  "categories": [
+    {
+      "keys": "bugs",
+      "title": "## 🐛 Bug Fixes",
+      "labels": [
+        "bug",
+        "bugfix",
+        "fix"
+      ]
+    },
+    {
+      "keys": "documentation",
+      "title": "## 📃 Documentation",
+      "labels": [
+        "docs",
+        "documentation"
+      ]
+    },
+    {
+      "keys": "features",
+      "title": "## 🎁 Features",
+      "labels": [
+        "feat",
+        "feature",
+        "enhancement"
+      ]
+    },
+    {
+      "keys": "refactor",
+      "title": "## 🔄 Refactor",
+      "labels": [
+        "refactor"
+      ]
+    },
+    {
+      "keys": "style",
+      "title": "## 🎨 Style",
+      "labels": [
+        "style"
+      ]
+    },
+    {
+      "keys": "tests",
+      "title": "## 🧪 Tests",
+      "labels": [
+        "test"
+      ]
+    },
+    {
+      "keys": "maintenance",
+      "title": "## 🛠️ Maintenance",
+      "labels": [
+        "chore"
+      ]
+    }
+  ],
+  "sort": {
+    "order": "DESC",
+    "on_property": "mergedAt"
+  },
+  "template": "#{{CHANGELOG}}",
+  "pr_template": "- #{{TITLE}}",
+  "empty_template": "- no changes",
+  "label_extractor": [
+    {
+      "pattern": "^([^(]+):(.*)",
+      "on_property": "title",
+      "target": "$1",
+      "flags": "giu"
+    }
+  ],
+  "trim_values": true,
+  "max_back_track_time_days": 365,
+  "exclude_merge_branches": [],
+  "tag_resolver": {
+    "method": "semver"
+  },
+  "ignore_labels": [
+    "merge"
+  ],
+  "base_branches": [
+    "main"
+  ]
+}
