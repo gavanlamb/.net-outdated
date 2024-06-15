@@ -40,6 +40,9 @@ jobs:
 
       - name: Set version
         run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}
           npm version ${{ steps.get-version.outputs.semVer }} -m "chore: [skip-ci] set version to %s"
 
       - name: Restore dependencies
