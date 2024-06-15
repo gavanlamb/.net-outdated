@@ -20,11 +20,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Qodana Scan
-        uses: JetBrains/qodana-action@v2024.1
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -61,14 +56,10 @@ jobs:
           files: |
             ./test-results/junit.xml
 
-      - name: Publish test coverage
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        if: always()
-        with:
-          skip-step: all
-          coverage-file: ./test-results/summary.json
-          base-coverage-file: ./test-results/summary.json
-          prnumber: ${{ github.event.pull_request.number }}
+      - name: Qodana Scan
+        uses: JetBrains/qodana-action@v2024.1
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
       - name: Package
         run: npm run package

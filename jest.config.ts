@@ -13,6 +13,8 @@ const config: Config.InitialOptions = {
     },
     collectCoverage: true,
     collectCoverageFrom: ['./src/**'],
+    coverageReporters: ['lcovonly', 'lcov', 'html-spa'],
+    coverageDirectory: '.qodana/code-coverage/',
     reporters: [
         'default',
         ['jest-junit', {
