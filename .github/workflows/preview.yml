@@ -1,0 +1,102 @@
+name: 'Preview'
+
+on:
+  pull_request:
+
+concurrency:
+  cancel-in-progress: false
+  group: preview-${{ github.ref_name }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: '5.x'
+      - name: Get version
+        id: get-version
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          targetPath: ./
+          disableCache: true
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Set version
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}
+          npm version --no-git-tag-version ${{ steps.get-version.outputs.semVer }} -m "chore: [skip-ci] set version to %s"
+
+      - name: Restore dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            ./test-results/junit.xml
+
+      - name: Publish test coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: always()
+        with:
+          skip-step: all
+          coverage-file: ./test-results/summary.json
+          base-coverage-file: ./test-results/summary.json
+          prnumber: ${{ github.event.pull_request.number }}
+
+      - name: Package
+        run: npm run package
+
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
+        with:
+          fail-if-changed: true
+          fail-message: Files in dist are not up-to-date. Please run 'npm run package' locally and commit the changes.
+          files: |
+            dist
+
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+

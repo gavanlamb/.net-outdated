@@ -1,229 +1,114 @@
-# Create a GitHub Action Using TypeScript
+# Dotnet outdated 
+This action checks for outdated dependencies in a .NET project. 
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+This action uses the `dotnet list packages` command. The action can also add a comment to the pull request and create a check run with the outdated dependencies.
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+## Inputs
+| Name                                  | Description                                                                                                                                                                                                             | Value type   | Required  |
+|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|-----------|
+| `add-pr-comment`                      | A flag to indicate whether to add a comment to the associated PR with a report of the outdated packages. If this is enabled and the action is executed for a non-pull-request build then the comment will not be added. | `boolean`    | false     |
+| `pr-comment-name`                     | A unique suffix for the pull-request comment for the current run.                                                                                                                                                       | `string`     | false     |
+| `add-check-run`                       | A flag to indicate whether to add a check run, to the action, containing a report of the outdated packages.                                                                                                             | `boolean`    | false     |
+| `fail-check-run-if-contains-outdated` | A flag to indicate whether the check run should fail if there are any direct dependencies that are out of date. In order for this to work the check run needs to be enabled by setting `add-check-run` to be true.      | `boolean`    | false     |
+| `check-run-name`                      | A unique name for the check run tab.                                                                                                                                                                                    | `string`     | false     |
+| `include-transitive-dependencies`     | A flag to indicate whether to include transitive and top-level packages.                                                                                                                                                | `boolean`    | false     |
+| `include-prerelease-dependencies`     | A flag to indicate whether to include prerelease packages as the target.                                                                                                                                                | `boolean`    | false     |
+| `include-highest-minor-only`          | A flag to indicate whether to consider only the packages with a matching major version number when searching for newer packages.                                                                                        | `boolean`    | false     |
+| `include-highest-patch-only`          | A flag to indicate whether to consider only the packages with a matching major and minor version numbers when searching for newer packages.                                                                             | `boolean`    | false     |
+| `nuget-sources`                       | The NuGet sources to use when searching for newer packages. To specify more than one use a comma separated value.                                                                                                       | `csv string` | false     |
+| `nuget-config-file-path`              | The path to the NuGet config file to use.                                                                                                                                                                               | `string`     | false     |
+| `frameworks`                          | The framework or frameworks to run the command for. To specify more than one use a comma separated value.                                                                                                               | `csv string` | false     |
+| `target`                              | The project or solution file to target. If a file is not specified, the command will search the current directory for one.                                                                                              | `string`     | false     |
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+## Environment variables
+| Name           | Description                                                                               | Required | Example                       |
+|----------------|-------------------------------------------------------------------------------------------|----------|-------------------------------|
+| `GITHUB_TOKEN` | The GitHub actions token. This is required for the action to interact with the GitHub API | true     | `${{ secrets.GITHUB_TOKEN }}` |
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+## Required permissions
 
-## Create Your Own Action
-
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
-
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
-
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
-
-## Initial Setup
-
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
-
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
-
-1. :hammer_and_wrench: Install the dependencies
-
-   ```bash
-   npm install
-   ```
-
-1. :building_construction: Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  import * as core from '@actions/core'
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
+## Examples
+### Single execution
 
 ```yaml
 steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
+  - name: My action
     with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+      add-pr-comment: true
+      add-check-run: true
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
-
-## Usage
-
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
+### Multiple executions
 
 ```yaml
 steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
+  - name: My action
     with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+      add-pr-comment: true
+      add-check-run: true
+      frameworks: net5.0
+      target: ./test.sln
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  - name: My action
+    with:
+      add-pr-comment: true
+      add-check-run: true
+      frameworks: net6.0
+      target: ./test.sln
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## Publishing a New Release
+## Changes
+### Branching strategy
+This repository uses [GitHub Flow](https://githubflow.github.io/) as the branching strategy. 
 
-This project includes a helper script, [`script/release`](./script/release)
-designed to streamline the process of tagging and pushing new releases for
-GitHub Actions.
+Branch names follow the format of `{type}/{ticket number}-{description}` the branch name is used to enrich the pull request description
+Supported branch names are:
+* `feature/*`
+* `feat/*`
+* `hotfix/*`
+* `hf/*`
+* `fix/*`
+* `docs/*`
+* `style/*`
+* `refactor/*`
+* `test/*`
+* `chore/*`
 
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. This script simplifies this process by performing the
-following steps:
+### Commit messages
+Commit messages for this repository follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
+Why is this approach used?
+
+The intended release approaches
+
+examples:
+
+The versioning of this repository follows [Semantic Versioning](https://semver.org/) and the version is
+
+### Versioning
+Versioning is achieved using [GitVersion](https://gitversion.net/). The version is calculated based on the commits and the history of the repository. 
+
+Supported scenarios
+* main
+* hotfix
+* feature
+* pull request
+
+Can be bumped or ignored based on commit messages. Look at `-version-bump-message` sections in https://gitversion.net/docs/reference/configuration.
+
+### Release notes
+Are generated from the generated version.
+
+### Testing
+#### Unit tests
+Code coverage at branch 100%
+
+#### Integration tests
+
+
+
