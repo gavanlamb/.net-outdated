@@ -43,7 +43,7 @@ jobs:
           git config user.name '${{ github.actor }}'
           git config user.email '${{ github.actor }}@users.noreply.github.com'
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}
-          npm version ${{ steps.get-version.outputs.semVer }} -m "chore: [skip-ci] set version to %s"
+          npm version --no-git-tag-version ${{ steps.get-version.outputs.semVer }} -m "chore: [skip-ci] set version to %s"
 
       - name: Restore dependencies
         run: npm ci
@@ -82,9 +82,21 @@ jobs:
           files: |
             dist
 
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
-          tags: false
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+
