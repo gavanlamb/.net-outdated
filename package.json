@@ -1,7 +1,7 @@
 {
   "name": "dotnet-outdated",
   "description": "Dotnet outdated GitHub Actions",
-  "version": "0.2.0-alpha.56",
+  "version": "0.2.0-preview10.62",
   "author": "Gavan Lamb",
   "homepage": "https://github.com/marketplace/actions/dotnet-outdated",
   "repository": {
