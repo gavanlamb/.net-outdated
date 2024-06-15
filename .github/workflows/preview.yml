@@ -40,7 +40,7 @@ jobs:
 
       - name: Set version
         run: |
-          npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.semVer }}
+          npm version ${{ steps.get-version.outputs.semVer }}
 
       - name: Restore dependencies
         run: |

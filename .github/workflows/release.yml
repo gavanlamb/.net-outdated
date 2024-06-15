@@ -41,7 +41,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number }}
 
       - name: Set version
-        run: npm version --no-git-tag-version --allow-same-version ${{ steps.get-version.outputs.semVer }}
+        run: npm version ${{ steps.get-version.outputs.semVer }}
 
       - name: Restore dependencies
         run: npm ci
@@ -69,3 +69,13 @@ jobs:
 
       - name: Package
         run: npm run package
+
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
