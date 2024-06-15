@@ -29,7 +29,7 @@
   "scripts": {
     "lint": "npx eslint . -c .eslintrc.yml",
     "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
-    "test": "npx jest --json --outputFile=./test-results/summary.json",
+    "test": "npx jest --json --outputFile=./test-results/summary.json --ci",
     "all": "npm run lint && npm run test && npm run package"
   },
   "license": "MIT",
