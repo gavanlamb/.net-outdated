@@ -73,9 +73,13 @@ jobs:
       - name: Package
         run: npm run package
 
+      # Check to see if there are changes in the dist/ folder
+      # if there are then fail the pipeline because it should not be the case
+      # the developer should have run the package command before pushing
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: ${{ github.head_ref }}
           tags: false
