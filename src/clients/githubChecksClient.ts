@@ -36,9 +36,9 @@ async function createCheck(
         details_url: undefined,
         external_id: undefined,
         status,
-        started_at: Date.now(),
+        started_at: new Date().toISOString(),
         conclusion,
-        completed_at: Date.now(),
+        completed_at: new Date().toISOString(),
         output: {
             title,
             summary: body,
