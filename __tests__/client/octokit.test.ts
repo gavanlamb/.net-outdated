@@ -11,13 +11,14 @@ describe("createOctokitClient", () => {
         const OctokitMock = jest.fn();
         jest.doMock("octokit", () => ({ Octokit: OctokitMock }));
 
-        process.env.GITHUB_TOKEN = "test-token";
+        const token = "test-token";
+        process.env.GITHUB_TOKEN = token;
 
         const { createOctokitClient } = await import("../../src/clients/octokit");
         await createOctokitClient();
 
         expect(OctokitMock).toHaveBeenCalledWith({
-            auth: "test-token"
+            auth: token
         });
     });
 
