@@ -117,13 +117,20 @@ describe("listOutdatedPackages", () => {
             '--include-prerelease',
             '--highest-minor',
             '--highest-patch',
-            '--source source1',
-            '--source source2',
-            '--config nuget.config',
-            '--framework net5.0',
-            '--framework net6.0',
-            '--format json',
-            '--verbosity q'
+            '--source',
+            'source1',
+            '--source',
+            'source2',
+            '--config',
+            'nuget.config',
+            '--framework',
+            'net5.0',
+            '--framework',
+            'net6.0',
+            '--format',
+            'json',
+            '--verbosity',
+            'q'
         ];
 
         const { listOutdatedPackages } = await import("../../src/services/dotnetService");
@@ -249,8 +256,10 @@ describe("listOutdatedPackages", () => {
             'list',
             'package',
             '--outdated',
-            '--format json',
-            '--verbosity q'
+            '--format',
+            'json',
+            '--verbosity',
+            'q'
         ];
 
         const { listOutdatedPackages } = await import("../../src/services/dotnetService");
@@ -307,8 +316,10 @@ describe("listOutdatedPackages", () => {
             'list',
             'package',
             '--outdated',
-            '--format json',
-            '--verbosity q'
+            '--format',
+            'json',
+            '--verbosity',
+            'q'
         ];
 
         const { listOutdatedPackages } = await import("../../src/services/dotnetService");

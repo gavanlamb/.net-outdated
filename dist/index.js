@@ -38816,19 +38816,23 @@ function getNuGetSourceArguments() {
     const values = getStringArrayInput('nuget-sources');
     const sources = [];
     for (const value of values) {
-        sources.push(`--source ${value}`);
+        sources.push(`--source`);
+        sources.push(`${value}`);
     }
     return sources;
 }
 /**
  * Gets the packages-to-exclude argument from the action
- * @returns --exclude {packages} if the argument is set.
+ * @returns array containing '--config' and '{config}; if the argument is set.
  */
 function getNuGetConfigArgument() {
     const value = getStringInput('nuget-config-file-path');
-    if (value)
-        return `--config ${value}`;
-    return '';
+    const config = [];
+    if (value) {
+        config.push(`--config`);
+        config.push(`${value}`);
+    }
+    return config;
 }
 /**
  * Gets an array of NuGet package source arguments from the action
@@ -38838,7 +38842,8 @@ function getFrameworkArguments() {
     const values = getStringArrayInput('frameworks');
     const sources = [];
     for (const value of values) {
-        sources.push(`--framework ${value}`);
+        sources.push(`--framework`);
+        sources.push(`${value}`);
     }
     return sources;
 }
@@ -38857,10 +38862,12 @@ async function listOutdatedPackages() {
         getIncludeHighestMinorOnlyArgument(),
         getIncludeHighestPatchOnlyArgument(),
         ...getNuGetSourceArguments(),
-        getNuGetConfigArgument(),
+        ...getNuGetConfigArgument(),
         ...getFrameworkArguments(),
-        '--format json',
-        '--verbosity q'
+        '--format',
+        'json',
+        '--verbosity',
+        'q'
     ].filter(arg => arg !== '');
     (0,core.debug)(`Going to execute "dotnet ${args.join(" ")}"`);
     const output = await (0,exec.getExecOutput)('dotnet', args);
