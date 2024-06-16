@@ -97,17 +97,17 @@ jobs:
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}
           git tag -a ${{ env.tag }} -m "${{ env.tag }}}"
           git push origin tag ${{ env.tag }}
-      - name: Create release notes
-        uses: mikepenz/release-changelog-builder-action@v5.0.0-a02
-        id: create-release-notes
+      - name: Generate changelog
+        id: changelog
+        uses: requarks/changelog-action@v1
         with:
-          configuration: release-notes-config.yml
-          failOnError: false
-          toTag: ${{ github.sha }}
           token: ${{ github.token }}
+          tag: ${{ env.tag }}
+          writeToFile: false
+          includeInvalidCommits: true
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ steps.build-release-notes.outputs.changelog }}
+          body: "${{ steps.changelog.outputs.changes }}"
           tag_name: ${{ env.tag }}
           make_latest: true
