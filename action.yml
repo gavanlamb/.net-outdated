@@ -1,4 +1,4 @@
-name: Check outdated .NET packages
+name: Dotnet Outdated
 description: Check outdated .NET packages
 author: Gavan Lamb
 
