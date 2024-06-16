@@ -109,6 +109,7 @@ describe("listOutdatedPackages", () => {
         jest.doMock("@actions/exec", () => ({ getExecOutput: getExecOutputMock }));
 
         const expectedArgs = [
+            'list',
             target,
             'package',
             '--outdated',
@@ -245,6 +246,7 @@ describe("listOutdatedPackages", () => {
         jest.doMock("@actions/exec", () => ({ getExecOutput: getExecOutputMock }));
 
         const expectedArgs = [
+            'list',
             'package',
             '--outdated',
             '--format json',
@@ -302,6 +304,7 @@ describe("listOutdatedPackages", () => {
         jest.doMock("@actions/exec", () => ({ getExecOutput: getExecOutputMock }));
 
         const expectedArgs = [
+            'list',
             'package',
             '--outdated',
             '--format json',

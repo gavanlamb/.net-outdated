@@ -111,6 +111,7 @@ function getFrameworkArguments(): string[] {
  */
 async function listOutdatedPackages(): Promise<Configuration> {
     const args: string[] = [
+        'list',
         getTargetArgument(),
         'package',
         '--outdated',
