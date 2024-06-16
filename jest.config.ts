@@ -13,7 +13,7 @@ const config: Config.InitialOptions = {
     },
     collectCoverage: true,
     collectCoverageFrom: ['./src/**'],
-    coverageReporters: ['lcovonly', 'lcov', 'html-spa'],
+    coverageReporters: ['lcovonly', 'lcov', 'html'],
     coverageDirectory: '.qodana/code-coverage/',
     reporters: [
         'default',

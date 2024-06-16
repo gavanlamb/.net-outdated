@@ -1,6 +1,4 @@
-import { createActionAuth } from "@octokit/auth-action";
-import { Octokit } from "@octokit/core";
-import { retry } from "@octokit/plugin-retry";
+import { Octokit } from "octokit";
 import { debug } from "@actions/core";
 
 /**
@@ -10,22 +8,7 @@ import { debug } from "@actions/core";
 async function createOctokitClient(): Promise<any> {
     debug('Going to create octokit client...');
 
-    const auth = createActionAuth();
-    debug('Retrieved Octokit auth');
-
-    const authentication = await auth();
-    debug('Created Octokit auth');
-
-    const octokitClient = Octokit.plugin(retry);
-    debug('Added retry policy to octokit client');
-
-    const client= new octokitClient({
-        auth: authentication.token,
-        request: {
-            retries: 3,
-            retryAfter: 1000,
-        }
-    });
+    const client = new Octokit({auth: process.env.GITHUB_TOKEN});
     debug('Created Octokit client');
 
     return client;
