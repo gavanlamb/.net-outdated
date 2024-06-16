@@ -38848,6 +38848,7 @@ function getFrameworkArguments() {
  */
 async function listOutdatedPackages() {
     const args = [
+        'list',
         getTargetArgument(),
         'package',
         '--outdated',
