@@ -23,6 +23,7 @@ describe("createCheck", () => {
             CheckRunStatus.Completed,
             CheckConclusion.Success,
             "Check Title",
+            "Check Summary",
             "Check Body"
         );
 
@@ -50,6 +51,7 @@ describe("createCheck", () => {
             CheckRunStatus.Completed,
             CheckConclusion.Success,
             "Check Title",
+            "Check Summary",
             "Check Body"
         );
 
@@ -63,6 +65,7 @@ describe("createCheck", () => {
             "\tstatus: completed\n" +
             "\tconclusion: success\n" +
             "\ttitle: Check Title\n" +
+            "\tsummary: Check Summary\n" +
             "\tbody: Check Body");
         expect(debugMock).toHaveBeenCalledWith("Called the rest endpoint to create check run");
     });
@@ -83,6 +86,7 @@ describe("createCheck", () => {
             CheckRunStatus.Completed,
             CheckConclusion.Success,
             "Check Title",
+            "Check Summary",
             "Check Body"
         );
 
@@ -95,6 +99,7 @@ describe("createCheck", () => {
             "\tstatus: completed\n" +
             "\tconclusion: success\n" +
             "\ttitle: Check Title\n" +
+            "\tsummary: Check Summary\n" +
             "\tbody: Check Body");
         expect(debugMock).toHaveBeenCalledWith("Called the rest endpoint to create check run");
         expect(debugMock).toHaveBeenCalledWith("Check run created successfully.");

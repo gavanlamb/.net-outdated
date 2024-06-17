@@ -80,10 +80,13 @@ describe("run", () => {
         listOutdatedPackagesMock.mockReturnValue(Promise.resolve(configuration));
         jest.doMock("../../src/services/dotnetService", () => ({ listOutdatedPackages: listOutdatedPackagesMock }));
 
-        const detailedView = "# Dotnet Outdated";
-        const getDetailedViewMock = jest.fn();
-        getDetailedViewMock.mockReturnValue(detailedView);
-        jest.doMock("../../src/services/summaryService", () => ({ getDetailedView: getDetailedViewMock }));
+        const detailedBody = "# Dotnet Outdated";
+        const getDetailedBodyMock = jest.fn();
+        getDetailedBodyMock.mockReturnValue(detailedBody);
+        const summaryBody = "# Dotnet Outdated";
+        const getSummaryBodyMock = jest.fn();
+        getSummaryBodyMock.mockReturnValue(summaryBody);
+        jest.doMock("../../src/services/summaryService", () => ({ getDetailedBody: getDetailedBodyMock, getSummaryBody: getSummaryBodyMock }));
 
         const addCommentMock = jest.fn();
         addCommentMock.mockReturnValue(Promise.resolve);
@@ -94,9 +97,10 @@ describe("run", () => {
         const { run } = await import("../../src/services/outdatedService");
         await run();
 
-        expect(getDetailedViewMock).toHaveBeenCalledWith(configuration);
-        expect(createCheckRunMock).toHaveBeenCalledWith(detailedView, true);
-        expect(addCommentMock).toHaveBeenCalledWith(detailedView);
+        expect(getDetailedBodyMock).toHaveBeenCalledWith(configuration);
+        expect(getSummaryBodyMock).toHaveBeenCalledWith(configuration);
+        expect(createCheckRunMock).toHaveBeenCalledWith(summaryBody, detailedBody, true);
+        expect(addCommentMock).toHaveBeenCalledWith(detailedBody);
     });
 
     it("should catch exceptions and fail execution", async () => {

@@ -51875,14 +51875,15 @@ async function updateComment(owner, repo, commentId, body) {
  * @param headSha headSha
  * @param status the status of the check
  * @param conclusion status of the conclusion
- * @param title title of the check run
- * @param body the body of the check run
+ * @param title of the check run
+ * @param summary of the check run
+ * @param body of the check run
  * @returns {Promise<void>} Resolves when the action is complete
  * @throws Error when the response indicates the request was unsuccessful.
  */
-async function createCheck(owner, repo, name, headSha, status, conclusion, title, body) {
+async function createCheck(owner, repo, name, headSha, status, conclusion, title, summary, body) {
     const client = await createOctokitClient();
-    (0,core.debug)(`Going to call the rest endpoint to delete an issue comment with the following details:\n\towner: ${owner}\n\trepo: ${repo}\n\tname: ${name}\n\theadSha: ${headSha}\n\tstatus: ${status}\n\tconclusion: ${conclusion}\n\ttitle: ${title}\n\tbody: ${body}`);
+    (0,core.debug)(`Going to call the rest endpoint to delete an issue comment with the following details:\n\towner: ${owner}\n\trepo: ${repo}\n\tname: ${name}\n\theadSha: ${headSha}\n\tstatus: ${status}\n\tconclusion: ${conclusion}\n\ttitle: ${title}\n\tsummary: ${summary}\n\tbody: ${body}`);
     const response = await client.rest.checks.create({
         owner,
         repo,
@@ -51896,7 +51897,7 @@ async function createCheck(owner, repo, name, headSha, status, conclusion, title
         completed_at: new Date().toISOString(),
         output: {
             title,
-            summary: body,
+            summary,
             text: body
         }
     });
@@ -51961,10 +51962,11 @@ async function getCommentId(owner, repo, issueNumber, messageId) {
 /**
  * Add check run
  * @returns {Promise<void>} Resolves when the action is complete.
+ * @param summary of the check run
  * @param body the main text that will be displayed to the user
  * @param hasAny flag to indicate if there are any packages detected, exclusive of transitive
  */
-async function createCheckRun(body, hasAny) {
+async function createCheckRun(summary, body, hasAny) {
     try {
         const addCheckRunArgument = getBooleanInput('add-check-run', false);
         if (!addCheckRunArgument) {
@@ -51984,7 +51986,7 @@ async function createCheckRun(body, hasAny) {
         (0,core.debug)(`status: ${status}`);
         const conclusion = hasAny && addFailCheckIfContainsOutdatedArgument ? CheckConclusion.Failure : CheckConclusion.Success;
         (0,core.debug)(`conclusion: ${conclusion}`);
-        await createCheck(owner, repo, name, headSha, status, conclusion, name, body);
+        await createCheck(owner, repo, name, headSha, status, conclusion, name, summary, body);
     }
     catch (err) {
         if (err instanceof Error)
@@ -51994,9 +51996,9 @@ async function createCheckRun(body, hasAny) {
 /**
  * Add a comment to the PR
  * @returns {Promise<void>} Resolves when the action is complete.
- * @param message the body of the comment
+ * @param body the body of the comment
  */
-async function addComment(message) {
+async function addComment(body) {
     try {
         const addPrCommentArgument = getBooleanInput('add-pr-comment', false);
         if (!addPrCommentArgument) {
@@ -52022,18 +52024,18 @@ async function addComment(message) {
         const commentId = await getCommentId(owner, repo, issueNumber, messageId);
         (0,core.debug)(`commentId: ${commentId}`);
         if (commentId) {
-            if (!message) {
+            if (!body) {
                 await deleteComment(owner, repo, commentId);
                 (0,core.debug)('Comment deleted successfully');
             }
             else {
-                await updateComment(owner, repo, commentId, `${messageId}\n\n${message}`);
+                await updateComment(owner, repo, commentId, `${messageId}\n\n# .Net Outdated\n\n${body}`);
                 (0,core.debug)('Comment updated successfully');
             }
         }
         else {
-            if (message) {
-                await createComment(owner, repo, issueNumber, `${messageId}\n\n${message}`);
+            if (body) {
+                await createComment(owner, repo, issueNumber, `${messageId}\n\n# .Net Outdated\n\n${body}`);
                 (0,core.debug)('Comment added successfully');
             }
             else {
@@ -52242,7 +52244,11 @@ function getFormattedVersion(difference, version) {
             return version;
     }
 }
-function getDetailedView(configuration) {
+/**
+ * Get the detailed body of the outdated packages
+ * @param configuration to generate the detailed body for
+ */
+function getDetailedBody(configuration) {
     (0,core.debug)('Going to generate detailed view...');
     let markdown = "";
     for (const project of configuration.projects) {
@@ -52286,7 +52292,7 @@ function getDetailedView(configuration) {
         }
     }
     if (markdown) {
-        markdown = `# Dotnet Outdated\n\n${markdown}`
+        markdown = `${markdown}`
             + "> __Note__\n" +
             ">\n" +
             "> 🔴: Major version update or pre-release version. Possible breaking changes.\n" +
@@ -52296,10 +52302,43 @@ function getDetailedView(configuration) {
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n";
     }
     else {
-        markdown = "# Dotnet Outdated\n\n"
-            + "All packages are up-to-date with the latest versions";
+        markdown = `All packages are up-to-date with the latest versions`;
     }
     (0,core.debug)(`Generated detailed view ${markdown}`);
+    return markdown;
+}
+/**
+ * Get the summary body of the outdated packages
+ * @param configuration to generate the summary body for
+ */
+function getSummaryBody(configuration) {
+    (0,core.debug)('Going to generate summary view...');
+    let markdown = "";
+    for (const project of configuration.projects) {
+        const frameworks = project.frameworks ?? [];
+        if (frameworks.length === 0)
+            continue;
+        const fileName = getFileName(project.path);
+        const topLevelPackagesCount = frameworks
+            .flatMap(framework => framework.topLevelPackages ?? [])
+            .filter((item, index, self) => index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item)))
+            .length;
+        if (topLevelPackagesCount > 0)
+            markdown += `| ${fileName} | ${DependencyType.TopLevel} | ${topLevelPackagesCount} |\n`;
+        const transitivePackagesCount = frameworks
+            .flatMap(framework => framework.transitivePackages ?? [])
+            .filter((item, index, self) => index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item)))
+            .length;
+        if (transitivePackagesCount > 0)
+            markdown += `| ${fileName} | ${DependencyType.Transitive} | ${transitivePackagesCount} |\n`;
+    }
+    if (markdown) {
+        markdown = `| Project Name | Type | Count |\n|----|----|---:|\n${markdown}`;
+    }
+    else {
+        markdown = "All packages are up-to-date with the latest versions";
+    }
+    (0,core.debug)(`Generated summary view ${markdown}`);
     return markdown;
 }
 
@@ -52316,7 +52355,8 @@ function getDetailedView(configuration) {
 async function run() {
     try {
         const outdatedResponse = await listOutdatedPackages();
-        const message = getDetailedView(outdatedResponse);
+        const summaryBody = getSummaryBody(outdatedResponse);
+        const detailedBody = getDetailedBody(outdatedResponse);
         const anyOutdatedPackages = outdatedResponse
             .projects
             .filter(project => !!project.frameworks)
@@ -52325,8 +52365,8 @@ async function run() {
             .flatMap(framework => framework.topLevelPackages)
             .filter(topLevelPackages => !!topLevelPackages)
             .length > 0;
-        await createCheckRun(message, anyOutdatedPackages);
-        await addComment(message);
+        await createCheckRun(summaryBody, detailedBody, anyOutdatedPackages);
+        await addComment(detailedBody);
     }
     catch (error) {
         if (error instanceof Error)

@@ -10,7 +10,8 @@ describe("createCheckRun", () => {
     });
 
     it("should not create a check run if add-check-run input is false", async () => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const hasAny = true;
 
         const debugMock = jest.fn();
@@ -25,7 +26,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, hasAny);
+        await createCheckRun(summaryBody, detailedBody, hasAny);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(1);
         expect(debugMock).toHaveBeenCalledWith('Check run is disabled');
@@ -37,7 +38,8 @@ describe("createCheckRun", () => {
         [CheckConclusion.Success, false, true],
         [CheckConclusion.Success, false, false]
     ])("should create a check run with conclusion equal to %s when fail-check-run-if-contains-outdated is %s and hasAny is %s", async (conclusion, failCheckRunIfContainsOutdated, hasAny) => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const name = "name";
         const owner = "owner";
         const repo = "repo";
@@ -63,7 +65,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, hasAny);
+        await createCheckRun(summaryBody, detailedBody, hasAny);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
@@ -75,14 +77,15 @@ describe("createCheckRun", () => {
         expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
         expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
         expect(createCheckMock).toHaveBeenCalledTimes(1);
-        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, body);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, summaryBody, detailedBody);
     });
 
     test.each([
         ["name", "name"],
         ["Dotnet Outdated", null]
     ])("should create a check run with a name of %s when the check-run-name is %s", async (expectedName: string, name: string | null) => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const conclusion = CheckConclusion.Success;
         const owner = "owner";
         const repo = "repo";
@@ -108,7 +111,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, true);
+        await createCheckRun(summaryBody, detailedBody, true);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
@@ -120,11 +123,12 @@ describe("createCheckRun", () => {
         expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
         expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
         expect(createCheckMock).toHaveBeenCalledTimes(1);
-        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, expectedName, sha, status, conclusion, expectedName, body);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, expectedName, sha, status, conclusion, expectedName, summaryBody, detailedBody);
     });
 
     it("should create a check run when inputs are valid", async () => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const conclusion = CheckConclusion.Success;
         const name = "Dotnet Outdated";
         const owner = "owner";
@@ -151,7 +155,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, true);
+        await createCheckRun(summaryBody, detailedBody, true);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
@@ -163,11 +167,12 @@ describe("createCheckRun", () => {
         expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
         expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
         expect(createCheckMock).toHaveBeenCalledTimes(1);
-        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, body);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, summaryBody, detailedBody);
     });
 
     it("should create a check run using the context sha instead of the pr head sha when inputs are valid", async () => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const conclusion = CheckConclusion.Success;
         const name = "Dotnet Outdated";
         const owner = "owner";
@@ -194,7 +199,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, true);
+        await createCheckRun(summaryBody, detailedBody, true);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
@@ -206,11 +211,12 @@ describe("createCheckRun", () => {
         expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
         expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
         expect(createCheckMock).toHaveBeenCalledTimes(1);
-        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, body);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, summaryBody, detailedBody);
     });
 
     it("should catch exceptions and log errors", async () => {
-        const body = "body";
+        const detailedBody = "detailed";
+        const summaryBody = "summary";
         const errorText = "Unexpected error";
         const owner = "owner";
         const repo = "repo";
@@ -237,7 +243,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
 
         const { createCheckRun } = await import("../../src/services/githubService");
-        await createCheckRun(body, true);
+        await createCheckRun(summaryBody, detailedBody, true);
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
@@ -545,7 +551,7 @@ describe("addComment", () => {
         expect(debugMock).toHaveBeenCalledWith(`Found comment for ${messageId}. Comment ID is: ${commentId}`);
         expect(debugMock).toHaveBeenCalledWith(`commentId: ${commentId}`);
         expect(updateCommentMock).toHaveBeenCalledTimes(1);
-        expect(updateCommentMock).toHaveBeenCalledWith(owner, repo, commentId, `${messageId}\n\n${body}`);
+        expect(updateCommentMock).toHaveBeenCalledWith(owner, repo, commentId, `${messageId}\n\n# .Net Outdated\n\n${body}`);
         expect(debugMock).toHaveBeenCalledWith('Comment updated successfully');
     });
 
@@ -591,7 +597,7 @@ describe("addComment", () => {
         expect(debugMock).toHaveBeenCalledWith(`commentId: ${null}`);
         expect(debugMock).toHaveBeenCalledWith(`No comment found for ${messageId}`);
         expect(createCommentMock).toHaveBeenCalledTimes(1);
-        expect(createCommentMock).toHaveBeenCalledWith(owner, repo, issueNumber, `${messageId}\n\n${body}`);
+        expect(createCommentMock).toHaveBeenCalledWith(owner, repo, issueNumber, `${messageId}\n\n# .Net Outdated\n\n${body}`);
         expect(debugMock).toHaveBeenCalledWith('Comment added successfully');
     });
 

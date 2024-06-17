@@ -26,7 +26,11 @@ function getFormattedVersion(
     }
 }
 
-function getDetailedView(
+/**
+ * Get the detailed body of the outdated packages
+ * @param configuration to generate the detailed body for
+ */
+function getDetailedBody(
     configuration: Configuration): string
 {
     debug('Going to generate detailed view...');
@@ -91,7 +95,7 @@ function getDetailedView(
 
     if(markdown)
     {
-        markdown = `# Dotnet Outdated\n\n${markdown}`
+        markdown = `${markdown}`
             + "> __Note__\n" +
             ">\n" +
             "> 🔴: Major version update or pre-release version. Possible breaking changes.\n" +
@@ -102,14 +106,61 @@ function getDetailedView(
     }
     else
     {
-        markdown = "# Dotnet Outdated\n\n"
-            + "All packages are up-to-date with the latest versions";
+        markdown = `All packages are up-to-date with the latest versions`;
     }
 
     debug(`Generated detailed view ${markdown}`);
     return markdown;
 }
 
+/**
+ * Get the summary body of the outdated packages
+ * @param configuration to generate the summary body for
+ */
+function getSummaryBody(
+    configuration: Configuration): string
+{
+    debug('Going to generate summary view...');
+
+    let markdown = "";
+
+    for (const project of configuration.projects)
+    {
+        const frameworks = project.frameworks ?? [];
+        if(frameworks.length === 0)
+            continue;
+
+        const fileName = getFileName(project.path);
+
+        const topLevelPackagesCount = frameworks
+            .flatMap(framework => framework.topLevelPackages ?? [])
+            .filter((item, index, self) => index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item)))
+            .length;
+        if(topLevelPackagesCount > 0)
+            markdown += `| ${fileName} | ${DependencyType.TopLevel} | ${topLevelPackagesCount} |\n`;
+
+        const transitivePackagesCount = frameworks
+            .flatMap(framework => framework.transitivePackages ?? [])
+            .filter((item, index, self) => index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(item)))
+            .length;
+        if(transitivePackagesCount > 0)
+            markdown += `| ${fileName} | ${DependencyType.Transitive} | ${transitivePackagesCount} |\n`;
+    }
+
+    if(markdown)
+    {
+        markdown = `| Project Name | Type | Count |\n|----|----|---:|\n${markdown}`;
+    }
+    else
+    {
+        markdown = "All packages are up-to-date with the latest versions";
+    }
+
+    debug(`Generated summary view ${markdown}`);
+    return markdown;
+}
+
 export {
-    getDetailedView
+    getDetailedBody,
+    getSummaryBody
 };

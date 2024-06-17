@@ -9,7 +9,8 @@ import {
     listOutdatedPackages
 } from "./dotnetService";
 import {
-    getDetailedView
+    getDetailedBody,
+    getSummaryBody
 } from "./summaryService";
 
 /**
@@ -22,7 +23,10 @@ async function run(): Promise<void>
     {
         const outdatedResponse = await listOutdatedPackages();
 
-        const message = getDetailedView(
+        const summaryBody = getSummaryBody(
+            outdatedResponse);
+
+        const detailedBody = getDetailedBody(
             outdatedResponse);
 
         const anyOutdatedPackages = outdatedResponse
@@ -35,11 +39,13 @@ async function run(): Promise<void>
             .length > 0;
 
         await createCheckRun(
-            message,
+            summaryBody,
+            detailedBody,
             anyOutdatedPackages);
 
+
         await addComment(
-            message);
+            detailedBody);
 
     } catch (error) {
         if (error instanceof Error)

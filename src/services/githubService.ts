@@ -58,10 +58,12 @@ async function getCommentId(
 /**
  * Add check run
  * @returns {Promise<void>} Resolves when the action is complete.
+ * @param summary of the check run
  * @param body the main text that will be displayed to the user
  * @param hasAny flag to indicate if there are any packages detected, exclusive of transitive
  */
 async function createCheckRun(
+    summary: string,
     body: string,
     hasAny: boolean): Promise<void>
 {
@@ -101,6 +103,7 @@ async function createCheckRun(
             status,
             conclusion,
             name,
+            summary,
             body);
     }
     catch (err)
@@ -113,10 +116,10 @@ async function createCheckRun(
 /**
  * Add a comment to the PR
  * @returns {Promise<void>} Resolves when the action is complete.
- * @param message the body of the comment
+ * @param body the body of the comment
  */
 async function addComment(
-    message: string | null): Promise<void>
+    body: string | null): Promise<void>
 {
     try
     {
@@ -156,7 +159,7 @@ async function addComment(
         debug(`commentId: ${commentId}`);
 
         if (commentId) {
-            if (!message)
+            if (!body)
             {
                 await deleteComment(
                     owner,
@@ -170,18 +173,18 @@ async function addComment(
                     owner,
                     repo,
                     commentId,
-                    `${messageId}\n\n${message}`);
+                    `${messageId}\n\n# .Net Outdated\n\n${body}`);
                 debug('Comment updated successfully');
             }
         }
         else
         {
-            if (message) {
+            if (body) {
                 await createComment(
                     owner,
                     repo,
                     issueNumber,
-                    `${messageId}\n\n${message}`);
+                    `${messageId}\n\n# .Net Outdated\n\n${body}`);
                 debug('Comment added successfully');
             } else {
                 debug('Comment is null or empty, no action taken');
