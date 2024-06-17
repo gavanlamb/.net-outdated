@@ -10,8 +10,9 @@ import { createOctokitClient } from "./octokit";
  * @param headSha headSha
  * @param status the status of the check
  * @param conclusion status of the conclusion
- * @param title title of the check run
- * @param body the body of the check run
+ * @param title of the check run
+ * @param summary of the check run
+ * @param body of the check run
  * @returns {Promise<void>} Resolves when the action is complete
  * @throws Error when the response indicates the request was unsuccessful.
  */
@@ -23,11 +24,12 @@ async function createCheck(
     status: CheckRunStatus,
     conclusion: CheckConclusion,
     title: string,
+    summary: string,
     body: string): Promise<void>
 {
     const client = await createOctokitClient();
 
-    debug(`Going to call the rest endpoint to delete an issue comment with the following details:\n\towner: ${owner}\n\trepo: ${repo}\n\tname: ${name}\n\theadSha: ${headSha}\n\tstatus: ${status}\n\tconclusion: ${conclusion}\n\ttitle: ${title}\n\tbody: ${body}`);
+    debug(`Going to call the rest endpoint to delete an issue comment with the following details:\n\towner: ${owner}\n\trepo: ${repo}\n\tname: ${name}\n\theadSha: ${headSha}\n\tstatus: ${status}\n\tconclusion: ${conclusion}\n\ttitle: ${title}\n\tsummary: ${summary}\n\tbody: ${body}`);
     const response = await client.rest.checks.create({
         owner,
         repo,
@@ -41,7 +43,7 @@ async function createCheck(
         completed_at: new Date().toISOString(),
         output: {
             title,
-            summary: body,
+            summary,
             text: body
         }
     });
