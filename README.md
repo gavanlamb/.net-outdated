@@ -1,7 +1,11 @@
 # .Net outdated 
-This action checks for outdated dependencies in a .NET project. 
+[![Release](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml/badge.svg)](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml)
 
-This action uses the `dotnet list package` command. The action can also add a comment to the pull request and create a check run with the outdated dependencies.
+This action checks for outdated dependencies in a .NET project or solution. 
+
+This action uses the `dotnet list package` command. 
+
+The action can add a comment to the pull request and create a check run with the a list of the outdated dependencies by project and framework.
 
 ## Inputs
 | Name                                  | Description                                                                                                                                                                                                                                                                                                                        | Value type   | Required  |
@@ -27,7 +31,6 @@ This action uses the `dotnet list package` command. The action can also add a co
 
 ## Permissions
 Minimal [workflow job permissions](https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs#example-setting-permissions-for-a-specific-job)
-required by this action in **public** GitHub repositories are:
 
 ```yaml
 permissions:
@@ -35,19 +38,17 @@ permissions:
   pull-requests: write
 ```
 
-The following permissions are required in **private** GitHub repos:
-```yaml
-permissions:
-  contents: read
-  issues: read
-```
-With `comment_mode: off`, the `pull-requests: write` permission is not needed.
+## Required steps
+It is required for the application to be restored before running this action. This can be done by adding a step to restore the project or solution.
+
 
 ## Examples
-### Single execution
+### Execute once in your pipeline
 
 ```yaml
 steps:
+  - name: Restore
+    run: dotnet restore
   - name: My action
     with:
       add-pr-comment: true
@@ -56,10 +57,12 @@ steps:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Multiple executions
+### Execute once in your pipeline
 
 ```yaml
 steps:
+  - name: Restore
+    run: dotnet restore
   - name: My action
     with:
       add-pr-comment: true
