@@ -590,3 +590,479 @@ describe("getDetailedBody", () => {
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
 });
+
+describe("getSummaryBody", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.resetModules();
+    });
+
+    it("should return a summary markdown view", async () => {
+        const configuration: Configuration = {
+            parameters: "-outdated",
+            version: 1,
+            sources: [],
+            projects: [
+                {
+                    path: "/path/to/project.csproj",
+                    frameworks: [
+                        {
+                            framework: "net5.0",
+                            topLevelPackages: [
+                                {
+                                    id: "PackageA",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageB",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageC",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageD",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageE",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.1"
+                                }
+                            ],
+                            transitivePackages: [
+                                {
+                                    id: "PackageF",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.1"
+                                },
+                                {
+                                    id: "PackageG",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.0-foo.bar"
+                                },
+                                {
+                                    id: "PackageH",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.0+foo"
+                                },
+                                {
+                                    id: "PackageI",
+                                    resolvedVersion: "1.0.1",
+                                    latestVersion: "1.0.0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
+        jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
+
+        const semverDiffMock = jest.fn();
+        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+
+        const { getSummaryBody } = await import("../../src/services/summaryService");
+        const result = getSummaryBody(configuration);
+
+        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
+        expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
+            "| Project Name | Type | Count |\n" +
+            "|----|----|---:|\n" +
+            "| project.csproj | Top Level | 5 |\n" +
+            "| project.csproj | Transitive | 4 |\n");
+        expect(result).toContain("| Project Name | Type | Count |");
+        expect(result).toContain("|----|----|---:|");
+        expect(result).toContain("| project.csproj | Top Level | 5 |");
+        expect(result).toContain("| project.csproj | Transitive | 4 |");
+    });
+
+    it("should return a summary markdown with the distinct count when multiple frameworks have the same outdated packages", async () => {
+        const configuration: Configuration = {
+            parameters: "-outdated",
+            version: 1,
+            sources: [],
+            projects: [
+                {
+                    path: "/path/to/project.csproj",
+                    frameworks: [
+                        {
+                            framework: "net5.0",
+                            topLevelPackages: [
+                                {
+                                    id: "PackageA",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageB",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageC",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageD",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageE",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.1"
+                                }
+                            ],
+                            transitivePackages: [
+                                {
+                                    id: "PackageF",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.1"
+                                },
+                                {
+                                    id: "PackageG",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.0-foo.bar"
+                                },
+                                {
+                                    id: "PackageH",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.0+foo"
+                                },
+                                {
+                                    id: "PackageI",
+                                    resolvedVersion: "1.0.1",
+                                    latestVersion: "1.0.0"
+                                }
+                            ]
+                        },
+                        {
+                            framework: "net6.0",
+                            topLevelPackages: [
+                                {
+                                    id: "PackageA",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageB",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageC",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageD",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageE",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.1"
+                                }
+                            ],
+                            transitivePackages: [
+                                {
+                                    id: "PackageF",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.1"
+                                },
+                                {
+                                    id: "PackageG",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.0-foo.bar"
+                                },
+                                {
+                                    id: "PackageH",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.0+foo"
+                                },
+                                {
+                                    id: "PackageI",
+                                    resolvedVersion: "1.0.1",
+                                    latestVersion: "1.0.0"
+                                }
+                            ]
+                        },
+                        {
+                            framework: "net7.0",
+                            topLevelPackages: [
+                                {
+                                    id: "PackageA",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageB",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageC",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageD",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageE",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.1"
+                                }
+                            ],
+                            transitivePackages: [
+                                {
+                                    id: "PackageF",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.1"
+                                },
+                                {
+                                    id: "PackageG",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.0-foo.bar"
+                                },
+                                {
+                                    id: "PackageH",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.0+foo"
+                                },
+                                {
+                                    id: "PackageI",
+                                    resolvedVersion: "1.0.1",
+                                    latestVersion: "1.0.0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
+        jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
+
+        const semverDiffMock = jest.fn();
+        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+
+        const { getSummaryBody } = await import("../../src/services/summaryService");
+        const result = getSummaryBody(configuration);
+
+        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
+        expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
+            "| Project Name | Type | Count |\n" +
+            "|----|----|---:|\n" +
+            "| project.csproj | Top Level | 5 |\n" +
+            "| project.csproj | Transitive | 4 |\n");
+        expect(result).toContain("| Project Name | Type | Count |");
+        expect(result).toContain("|----|----|---:|");
+        expect(result).toContain("| project.csproj | Top Level | 5 |");
+        expect(result).toContain("| project.csproj | Transitive | 4 |");
+    });
+
+    it("should return a summary markdown view excluding transitive dependencies", async () => {
+        const configuration: Configuration = {
+            parameters: "-outdated",
+            version: 1,
+            sources: [],
+            projects: [
+                {
+                    path: "/path/to/project.csproj",
+                    frameworks: [
+                        {
+                            framework: "net5.0",
+                            topLevelPackages: [
+                                {
+                                    id: "PackageA",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageB",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "2.0.0"
+                                },
+                                {
+                                    id: "PackageC",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageD",
+                                    requestedVersion: "1.0.0-foo",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.1.0"
+                                },
+                                {
+                                    id: "PackageE",
+                                    requestedVersion: "1.0.0",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
+        jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
+
+        const semverDiffMock = jest.fn();
+        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+
+        const { getSummaryBody } = await import("../../src/services/summaryService");
+        const result = getSummaryBody(configuration);
+
+        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
+        expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
+          "| Project Name | Type | Count |\n" +
+          "|----|----|---:|\n" +
+          "| project.csproj | Top Level | 5 |\n");
+        expect(result).toContain("| Project Name | Type | Count |");
+        expect(result).toContain("|----|----|---:|");
+        expect(result).toContain("| project.csproj | Top Level | 5 |");
+    });
+
+    it("should return a summary markdown view excluding top level dependencies", async () => {
+        const configuration: Configuration = {
+            parameters: "-outdated",
+            version: 1,
+            sources: [],
+            projects: [
+                {
+                    path: "/path/to/project.csproj",
+                    frameworks: [
+                        {
+                            framework: "net5.0",
+                            transitivePackages: [
+                                {
+                                    id: "PackageF",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.1"
+                                },
+                                {
+                                    id: "PackageG",
+                                    resolvedVersion: "1.0.0-foo",
+                                    latestVersion: "1.0.0-foo.bar"
+                                },
+                                {
+                                    id: "PackageH",
+                                    resolvedVersion: "1.0.0",
+                                    latestVersion: "1.0.0+foo"
+                                },
+                                {
+                                    id: "PackageI",
+                                    resolvedVersion: "1.0.1",
+                                    latestVersion: "1.0.0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
+        jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
+
+        const semverDiffMock = jest.fn();
+        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+
+        const { getSummaryBody } = await import("../../src/services/summaryService");
+        const result = getSummaryBody(configuration);
+
+        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
+        expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
+          "| Project Name | Type | Count |\n" +
+          "|----|----|---:|\n" +
+          "| project.csproj | Transitive | 4 |\n");
+        expect(result).toContain("| Project Name | Type | Count |");
+        expect(result).toContain("|----|----|---:|");
+        expect(result).toContain("| project.csproj | Transitive | 4 |");
+    });
+
+    it("should return a string indicating frameworks all packages are up-to-date", async () => {
+        const configuration: Configuration = {
+            parameters: "-outdated",
+            version: 1,
+            sources: [],
+            projects: [
+                {
+                    path: "/path/to/project.csproj"
+                }
+            ]
+        };
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
+        jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
+
+        const semverDiffMock = jest.fn();
+        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+
+        const { getSummaryBody } = await import("../../src/services/summaryService");
+        const result = getSummaryBody(configuration);
+
+        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(debugMock).toHaveBeenCalledWith("Generated summary view All packages are up-to-date with the latest versions");
+        expect(result).toContain("All packages are up-to-date with the latest versions");
+    });
+});
