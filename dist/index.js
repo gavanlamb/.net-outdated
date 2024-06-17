@@ -52052,7 +52052,40 @@ async function addComment(body) {
 
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(1514);
+;// CONCATENATED MODULE: external "node:path"
+const external_node_path_namespaceObject = require("node:path");
+;// CONCATENATED MODULE: ./src/helpers/pathHelper.ts
+
+
+function getFileName(filePath) {
+    (0,core.debug)(`Going to get the file name from ${filePath}`);
+    const fileNameWithExtension = (0,external_node_path_namespaceObject.basename)(filePath);
+    (0,core.debug)(`The file name with extension is ${fileNameWithExtension}`);
+    const fileExtension = (0,external_node_path_namespaceObject.extname)(filePath);
+    (0,core.debug)(`The file extension is ${fileExtension}`);
+    const fileName = fileNameWithExtension.replace(fileExtension, '');
+    (0,core.debug)(`The file name is ${fileName}`);
+    return fileName;
+}
+
+
+;// CONCATENATED MODULE: ./src/errors/dotnetOutdatedCommandProblem.ts
+/**
+ * Error indicating a dotnet outdated command problem
+ */
+class DotnetOutdatedCommandProblem extends Error {
+    projectName;
+    constructor(projectName, message) {
+        super(message);
+        this.name = 'DotnetOutdatedCommandProblem';
+        this.projectName = projectName;
+    }
+}
+
+
 ;// CONCATENATED MODULE: ./src/services/dotnetService.ts
+
+
 
 
 
@@ -52172,29 +52205,19 @@ async function listOutdatedPackages() {
     (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the status code is ${output.exitCode}`);
     if (output.exitCode === 0) {
         (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stdout}`);
-        return JSON.parse(output.stdout);
+        const configuration = JSON.parse(output.stdout);
+        if (configuration.problems && configuration.problems.length > 0) {
+            const problem = configuration.problems[0];
+            const fileName = getFileName(problem.project);
+            const message = problem.text.replace(problem.project, fileName);
+            throw new DotnetOutdatedCommandProblem(fileName, message);
+        }
+        return configuration;
     }
     else {
         (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
         throw new Error(output.stderr);
     }
-}
-
-
-;// CONCATENATED MODULE: external "node:path"
-const external_node_path_namespaceObject = require("node:path");
-;// CONCATENATED MODULE: ./src/helpers/pathHelper.ts
-
-
-function getFileName(filePath) {
-    (0,core.debug)(`Going to get the file name from ${filePath}`);
-    const fileNameWithExtension = (0,external_node_path_namespaceObject.basename)(filePath);
-    (0,core.debug)(`The file name with extension is ${fileNameWithExtension}`);
-    const fileExtension = (0,external_node_path_namespaceObject.extname)(filePath);
-    (0,core.debug)(`The file extension is ${fileExtension}`);
-    const fileName = fileNameWithExtension.replace(fileExtension, '');
-    (0,core.debug)(`The file name is ${fileName}`);
-    return fileName;
 }
 
 
