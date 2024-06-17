@@ -83,7 +83,7 @@ async function createCheckRun(
         const repo  = context.repo.repo;
         debug(`repo: ${repo}`);
 
-        const name = getStringInput('check-run-name') ?? 'Dotnet Outdated';
+        const name = getStringInput('check-run-name') ?? '.Net Outdated';
         debug(`name: ${name}`);
 
         const headSha = context.payload.pull_request?.head.sha ?? context.sha;
@@ -148,7 +148,7 @@ async function addComment(
         const suffix = getStringInput('pr-comment-name') ?? pullRequest.head.ref;
         debug(`suffix: ${suffix}`);
 
-        const messageId = `<!-- dotnet-outdated-comment:${suffix} -->`;
+        const messageId = `<!-- .net-outdated-comment:${suffix} -->`;
         debug(`messageId: ${messageId}`);
 
         const commentId = await getCommentId(

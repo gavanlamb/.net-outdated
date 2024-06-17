@@ -80,10 +80,10 @@ describe("run", () => {
         listOutdatedPackagesMock.mockReturnValue(Promise.resolve(configuration));
         jest.doMock("../../src/services/dotnetService", () => ({ listOutdatedPackages: listOutdatedPackagesMock }));
 
-        const detailedBody = "# Dotnet Outdated";
+        const detailedBody = "# .Net Outdated";
         const getDetailedBodyMock = jest.fn();
         getDetailedBodyMock.mockReturnValue(detailedBody);
-        const summaryBody = "# Dotnet Outdated";
+        const summaryBody = "# .Net Outdated";
         const getSummaryBodyMock = jest.fn();
         getSummaryBodyMock.mockReturnValue(summaryBody);
         jest.doMock("../../src/services/summaryService", () => ({ getDetailedBody: getDetailedBodyMock, getSummaryBody: getSummaryBodyMock }));

@@ -82,7 +82,7 @@ describe("createCheckRun", () => {
 
     test.each([
         ["name", "name"],
-        ["Dotnet Outdated", null]
+        [".Net Outdated", null]
     ])("should create a check run with a name of %s when the check-run-name is %s", async (expectedName: string, name: string | null) => {
         const detailedBody = "detailed";
         const summaryBody = "summary";
@@ -130,7 +130,7 @@ describe("createCheckRun", () => {
         const detailedBody = "detailed";
         const summaryBody = "summary";
         const conclusion = CheckConclusion.Success;
-        const name = "Dotnet Outdated";
+        const name = ".Net Outdated";
         const owner = "owner";
         const repo = "repo";
         const sha = "sha";
@@ -174,7 +174,7 @@ describe("createCheckRun", () => {
         const detailedBody = "detailed";
         const summaryBody = "summary";
         const conclusion = CheckConclusion.Success;
-        const name = "Dotnet Outdated";
+        const name = ".Net Outdated";
         const owner = "owner";
         const repo = "repo";
         const sha = "sha";
@@ -314,7 +314,7 @@ describe("addComment", () => {
         const commentKey = null;
         const headRef = "feature/branch";
         const issueNumber = 1;
-        const messageId = `<!-- dotnet-outdated-comment:${headRef} -->`;
+        const messageId = `<!-- .net-outdated-comment:${headRef} -->`;
         const owner = "owner";
         const repo = "repo";
 
@@ -339,7 +339,7 @@ describe("addComment", () => {
                 id: commentId,
                 node_id: "1242342",
                 url: "",
-                body:`${messageId}\n\n#Dotnet Outdated`,
+                body:`${messageId}\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -355,7 +355,7 @@ describe("addComment", () => {
                 id: 5,
                 node_id: "1242342",
                 url: "",
-                body:`<!-- dotnet-outdated-comment:5467546785 -->\n\n#Dotnet Outdated`,
+                body:`<!-- .net-outdated-comment:5467546785 -->\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -396,7 +396,7 @@ describe("addComment", () => {
         const commentId = 2;
         const commentKey = "key";
         const issueNumber = 1;
-        const messageId = `<!-- dotnet-outdated-comment:${commentKey} -->`;
+        const messageId = `<!-- .net-outdated-comment:${commentKey} -->`;
         const owner = "owner";
         const repo = "repo";
 
@@ -421,7 +421,7 @@ describe("addComment", () => {
                 id: commentId,
                 node_id: "1242342",
                 url: "",
-                body:`${messageId}\n\n#Dotnet Outdated`,
+                body:`${messageId}\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -437,7 +437,7 @@ describe("addComment", () => {
                 id: 5,
                 node_id: "1242342",
                 url: "",
-                body:`<!-- dotnet-outdated-comment:5467546785 -->\n\n#Dotnet Outdated`,
+                body:`<!-- .net-outdated-comment:5467546785 -->\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -478,7 +478,7 @@ describe("addComment", () => {
         const commentId = 2;
         const commentKey = "key";
         const issueNumber = 1;
-        const messageId = `<!-- dotnet-outdated-comment:${commentKey} -->`;
+        const messageId = `<!-- .net-outdated-comment:${commentKey} -->`;
         const owner = "owner";
         const repo = "repo";
 
@@ -503,7 +503,7 @@ describe("addComment", () => {
                 id: commentId,
                 node_id: "1242342",
                 url: "",
-                body:`${messageId}\n\n#Dotnet Outdated`,
+                body:`${messageId}\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -519,7 +519,7 @@ describe("addComment", () => {
                 id: 5,
                 node_id: "1242342",
                 url: "",
-                body:`<!-- dotnet-outdated-comment:5467546785 -->\n\n#Dotnet Outdated`,
+                body:`<!-- .net-outdated-comment:5467546785 -->\n\n# .Net Outdated`,
                 body_text: undefined,
                 body_html: undefined,
                 html_url: "",
@@ -559,7 +559,7 @@ describe("addComment", () => {
         const body = "Comment";
         const commentKey = "key";
         const issueNumber = 1;
-        const messageId = `<!-- dotnet-outdated-comment:${commentKey} -->`;
+        const messageId = `<!-- .net-outdated-comment:${commentKey} -->`;
         const owner = "owner";
         const repo = "repo";
 
@@ -605,7 +605,7 @@ describe("addComment", () => {
         const body = null;
         const commentKey = "key";
         const issueNumber = 1;
-        const messageId = `<!-- dotnet-outdated-comment:${commentKey} -->`;
+        const messageId = `<!-- .net-outdated-comment:${commentKey} -->`;
         const owner = "owner";
         const repo = "repo";
 
