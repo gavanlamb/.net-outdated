@@ -55,7 +55,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
-        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha }}));
+        jest.doMock("@actions/github", () => ({ context: {get repo() { return repoMock(); }, sha, payload:{ pull_request:{ head:{ sha }}}}}));
 
         const createCheckMock = jest.fn();
         jest.doMock("../../src/clients/githubChecksClient", () => ({ createCheck: createCheckMock }));
@@ -100,7 +100,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
-        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha }}));
+        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha, payload:{ pull_request:{ head:{ sha }}}}}));
 
         const createCheckMock = jest.fn();
         jest.doMock("../../src/clients/githubChecksClient", () => ({ createCheck: createCheckMock }));
@@ -123,12 +123,10 @@ describe("createCheckRun", () => {
         expect(createCheckMock).toHaveBeenCalledWith(owner, repo, expectedName, sha, status, conclusion, expectedName, body);
     });
 
-    test.each([
-        ["name", "name"],
-        [null, "Dotnet Outdated"]
-    ])("should create a check run when inputs are valid", async (name: string | null, expectedName: string) => {
+    it("should create a check run when inputs are valid", async () => {
         const body = "body";
         const conclusion = CheckConclusion.Success;
+        const name = "Dotnet Outdated";
         const owner = "owner";
         const repo = "repo";
         const sha = "sha";
@@ -145,7 +143,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
-        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha }}));
+        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha, payload:{ pull_request:{ head:{ sha }}}}}));
 
         const createCheckMock = jest.fn();
         jest.doMock("../../src/clients/githubChecksClient", () => ({ createCheck: createCheckMock }));
@@ -160,12 +158,55 @@ describe("createCheckRun", () => {
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(getStringInputMock).toHaveBeenCalledTimes(1);
-        expect(debugMock).toHaveBeenCalledWith(`name: ${expectedName}`);
+        expect(debugMock).toHaveBeenCalledWith(`name: ${name}`);
         expect(debugMock).toHaveBeenCalledWith(`headSha: ${sha}`);
         expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
         expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
         expect(createCheckMock).toHaveBeenCalledTimes(1);
-        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, expectedName, sha, status, conclusion, expectedName, body);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, body);
+    });
+
+    it("should create a check run using the context sha instead of the pr head sha when inputs are valid", async () => {
+        const body = "body";
+        const conclusion = CheckConclusion.Success;
+        const name = "Dotnet Outdated";
+        const owner = "owner";
+        const repo = "repo";
+        const sha = "sha";
+        const status = CheckRunStatus.Completed;
+
+        const debugMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+
+        const getBooleanInputMock = jest.fn();
+        when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
+        when(getBooleanInputMock).calledWith('fail-check-run-if-contains-outdated', false).mockReturnValueOnce(false);
+        const getStringInputMock = jest.fn();
+        when(getStringInputMock).calledWith('check-run-name').mockImplementationOnce(() => name);
+        jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
+
+        const repoMock = jest.fn().mockReturnValue({ owner, repo });
+        jest.doMock("@actions/github", () => ({ context: { get repo() { return repoMock(); }, sha, payload:{ pull_request: null }}}));
+
+        const createCheckMock = jest.fn();
+        jest.doMock("../../src/clients/githubChecksClient", () => ({ createCheck: createCheckMock }));
+
+        jest.doMock("../../src/clients/githubIssueCommentClient", () => {});
+
+        const { createCheckRun } = await import("../../src/services/githubService");
+        await createCheckRun(body, true);
+
+        expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
+        expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
+        expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
+        expect(getStringInputMock).toHaveBeenCalledTimes(1);
+        expect(debugMock).toHaveBeenCalledWith(`name: ${name}`);
+        expect(debugMock).toHaveBeenCalledWith(`headSha: ${sha}`);
+        expect(debugMock).toHaveBeenCalledWith(`status: ${status}`);
+        expect(debugMock).toHaveBeenCalledWith(`conclusion: ${conclusion}`);
+        expect(createCheckMock).toHaveBeenCalledTimes(1);
+        expect(createCheckMock).toHaveBeenCalledWith(owner, repo, name, sha, status, conclusion, name, body);
     });
 
     it("should catch exceptions and log errors", async () => {
@@ -189,7 +230,7 @@ describe("createCheckRun", () => {
         jest.doMock("../../src/helpers/inputHelper", () => ({ getBooleanInput: getBooleanInputMock, getStringInput: getStringInputMock }));
 
         const repoMock = jest.fn().mockReturnValue({ owner, repo });
-        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha }}));
+        jest.doMock("@actions/github", () => ({context: { get repo() { return repoMock(); }, sha, payload:{ pull_request:{ head:{ sha }}}}}));
 
         jest.doMock("../../src/clients/githubChecksClient", () => {});
 
