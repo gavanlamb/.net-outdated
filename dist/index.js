@@ -51978,7 +51978,7 @@ async function createCheckRun(summary, body, hasAny) {
         (0,core.debug)(`owner: ${owner}`);
         const repo = github.context.repo.repo;
         (0,core.debug)(`repo: ${repo}`);
-        const name = getStringInput('check-run-name') ?? 'Dotnet Outdated';
+        const name = getStringInput('check-run-name') ?? '.Net Outdated';
         (0,core.debug)(`name: ${name}`);
         const headSha = github.context.payload.pull_request?.head.sha ?? github.context.sha;
         (0,core.debug)(`headSha: ${headSha}`);
@@ -52019,7 +52019,7 @@ async function addComment(body) {
         (0,core.debug)(`issueNumber: ${issueNumber}`);
         const suffix = getStringInput('pr-comment-name') ?? pullRequest.head.ref;
         (0,core.debug)(`suffix: ${suffix}`);
-        const messageId = `<!-- dotnet-outdated-comment:${suffix} -->`;
+        const messageId = `<!-- .net-outdated-comment:${suffix} -->`;
         (0,core.debug)(`messageId: ${messageId}`);
         const commentId = await getCommentId(owner, repo, issueNumber, messageId);
         (0,core.debug)(`commentId: ${commentId}`);
