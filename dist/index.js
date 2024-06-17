@@ -51978,7 +51978,7 @@ async function createCheckRun(body, hasAny) {
         (0,core.debug)(`repo: ${repo}`);
         const name = getStringInput('check-run-name') ?? 'Dotnet Outdated';
         (0,core.debug)(`name: ${name}`);
-        const headSha = github.context.sha;
+        const headSha = github.context.payload.pull_request?.head.sha ?? github.context.sha;
         (0,core.debug)(`headSha: ${headSha}`);
         const status = CheckRunStatus.Completed;
         (0,core.debug)(`status: ${status}`);

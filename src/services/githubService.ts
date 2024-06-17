@@ -84,7 +84,7 @@ async function createCheckRun(
         const name = getStringInput('check-run-name') ?? 'Dotnet Outdated';
         debug(`name: ${name}`);
 
-        const headSha = context.sha;
+        const headSha = context.payload.pull_request?.head.sha ?? context.sha;
         debug(`headSha: ${headSha}`);
 
         const status = CheckRunStatus.Completed;
