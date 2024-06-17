@@ -1,7 +1,7 @@
 import { Configuration } from "../../src/types/configuration";
 import {when} from "jest-when";
 
-describe("getDetailedView", () => {
+describe("getDetailedBody", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.resetModules();
@@ -96,13 +96,12 @@ describe("getDetailedView", () => {
         when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
             "\n" +
             "### net5.0\n" +
@@ -126,7 +125,6 @@ describe("getDetailedView", () => {
             "> 🟡: Minor version update. Backwards-compatible features added.\n" +
             ">\n" +
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n");
-        expect(result).toContain("# Dotnet Outdated");
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
@@ -194,13 +192,12 @@ describe("getDetailedView", () => {
         when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
             "\n" +
             "### net5.0\n" +
@@ -219,7 +216,6 @@ describe("getDetailedView", () => {
             "> 🟡: Minor version update. Backwards-compatible features added.\n" +
             ">\n" +
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n");
-        expect(result).toContain("# Dotnet Outdated");
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
@@ -282,13 +278,12 @@ describe("getDetailedView", () => {
         when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
             "\n" +
             "### net5.0\n" +
@@ -307,7 +302,6 @@ describe("getDetailedView", () => {
             "> 🟡: Minor version update. Backwards-compatible features added.\n" +
             ">\n" +
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n");
-        expect(result).toContain("# Dotnet Outdated");
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
@@ -381,13 +375,12 @@ describe("getDetailedView", () => {
         when(semverDiffMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
             "\n" +
             "### net5.0\n" +
@@ -407,7 +400,6 @@ describe("getDetailedView", () => {
             "> 🟡: Minor version update. Backwards-compatible features added.\n" +
             ">\n" +
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n");
-        expect(result).toContain("# Dotnet Outdated");
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
@@ -482,13 +474,12 @@ describe("getDetailedView", () => {
         when(semverDiffMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
             "\n" +
             "### net5.0\n" +
@@ -508,7 +499,6 @@ describe("getDetailedView", () => {
             "> 🟡: Minor version update. Backwards-compatible features added.\n" +
             ">\n" +
             "> 🟢: Patch version update. Backwards-compatible bug fixes.\n");
-        expect(result).toContain("# Dotnet Outdated");
         expect(result).toContain("## project.csproj");
         expect(result).toContain("### net5.0");
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
@@ -541,14 +531,11 @@ describe("getDetailedView", () => {
         const semverDiffMock = jest.fn().mockReturnValue(null);
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
-            "All packages are up-to-date with the latest versions");
-        expect(result).toContain("# Dotnet Outdated");
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
 
@@ -574,14 +561,11 @@ describe("getDetailedView", () => {
         const semverDiffMock = jest.fn().mockReturnValue(null);
         jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
-            "All packages are up-to-date with the latest versions");
-        expect(result).toContain("# Dotnet Outdated");
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
 
@@ -598,14 +582,11 @@ describe("getDetailedView", () => {
 
         jest.doMock("semver-diff", () => {});
 
-        const { getDetailedView } = await import("../../src/services/summaryService");
-        const result = getDetailedView(configuration);
+        const { getDetailedBody } = await import("../../src/services/summaryService");
+        const result = getDetailedBody(configuration);
 
         expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
-        expect(debugMock).toHaveBeenCalledWith("Generated detailed view # Dotnet Outdated\n" +
-            "\n" +
-            "All packages are up-to-date with the latest versions");
-        expect(result).toContain("# Dotnet Outdated");
+        expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
 });

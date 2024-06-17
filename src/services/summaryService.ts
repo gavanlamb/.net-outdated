@@ -26,7 +26,11 @@ function getFormattedVersion(
     }
 }
 
-function getDetailedView(
+/**
+ * Get the detailed body of the outdated packages
+ * @param configuration to generate the detailed body for
+ */
+function getDetailedBody(
     configuration: Configuration): string
 {
     debug('Going to generate detailed view...');
@@ -91,7 +95,7 @@ function getDetailedView(
 
     if(markdown)
     {
-        markdown = `# Dotnet Outdated\n\n${markdown}`
+        markdown = `${markdown}`
             + "> __Note__\n" +
             ">\n" +
             "> 🔴: Major version update or pre-release version. Possible breaking changes.\n" +
@@ -102,8 +106,7 @@ function getDetailedView(
     }
     else
     {
-        markdown = "# Dotnet Outdated\n\n"
-            + "All packages are up-to-date with the latest versions";
+        markdown = `All packages are up-to-date with the latest versions`;
     }
 
     debug(`Generated detailed view ${markdown}`);
@@ -111,5 +114,5 @@ function getDetailedView(
 }
 
 export {
-    getDetailedView
+    getDetailedBody
 };
