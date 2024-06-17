@@ -1,4 +1,4 @@
-# Contributing to [Your GitHub Action Project Name]
+# Contributing
 
 ## Table of Contents
 1. [Code of Conduct](#code-of-conduct)
