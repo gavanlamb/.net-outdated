@@ -12,6 +12,12 @@ import {
 import {
     debug
 } from "@actions/core";
+import {
+    getFileName
+} from '../helpers/pathHelper';
+import {
+    DotnetOutdatedCommandProblem
+} from '../errors/dotnetOutdatedCommandProblem';
 
 /**
  * Gets the packages-to-exclude argument from the action
@@ -137,9 +143,18 @@ async function listOutdatedPackages(): Promise<Configuration> {
     const output = await getExecOutput('dotnet', args);
     debug(`Executed "dotnet ${args.join(" ")}" and the status code is ${output.exitCode}`);
 
-    if(output.exitCode === 0) {
+    if(output.exitCode === 0)
+    {
         debug(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stdout}`);
-        return JSON.parse(output.stdout) as Configuration;
+        const configuration =  JSON.parse(output.stdout) as Configuration;
+        if(configuration.problems && configuration.problems.length > 0)
+        {
+            const problem = configuration.problems[0];
+            const fileName = getFileName(problem.project);
+            const message = problem.text.replace(problem.project, fileName);
+            throw new DotnetOutdatedCommandProblem(fileName, message);
+        }
+        return configuration;
     }
     else
     {
