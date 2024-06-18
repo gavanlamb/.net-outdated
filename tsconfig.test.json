@@ -7,5 +7,5 @@
     "verbatimModuleSyntax": false
   },
   "include": ["./__tests__/**/*", "./src/**/*", "jest.config.ts"],
-  "exclude": ["./dist", "./node_modules", "./coverage"]
+  "exclude": ["./dist", "./node_modules", "./coverage", "./sample"]
 }
