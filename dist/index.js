@@ -52069,15 +52069,15 @@ function getFileName(filePath) {
 }
 
 
-;// CONCATENATED MODULE: ./src/errors/dotnetOutdatedCommandProblem.ts
+;// CONCATENATED MODULE: ./src/errors/dotnetOutdatedCommandProblemError.ts
 /**
  * Error indicating a dotnet outdated command problem
  */
-class DotnetOutdatedCommandProblem extends Error {
+class DotnetOutdatedCommandProblemError extends Error {
     projectName;
     constructor(projectName, message) {
         super(message);
-        this.name = 'DotnetOutdatedCommandProblem';
+        this.name = 'DotnetOutdatedCommandProblemError';
         this.projectName = projectName;
     }
 }
@@ -52201,21 +52201,21 @@ async function listOutdatedPackages() {
         'q'
     ].filter(arg => arg !== '');
     (0,core.debug)(`Going to execute "dotnet ${args.join(" ")}"`);
-    const output = await (0,exec.getExecOutput)('dotnet', args);
+    const output = await (0,exec.getExecOutput)('dotnet', args, { silent: true });
     (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the status code is ${output.exitCode}`);
     if (output.exitCode === 0) {
         (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stdout}`);
-        const configuration = JSON.parse(output.stdout);
+        return JSON.parse(output.stdout);
+    }
+    else {
+        (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
+        const configuration = JSON.parse(output.stderr);
         if (configuration.problems && configuration.problems.length > 0) {
             const problem = configuration.problems[0];
             const fileName = getFileName(problem.project);
             const message = problem.text.replace(problem.project, fileName);
-            throw new DotnetOutdatedCommandProblem(fileName, message);
+            throw new DotnetOutdatedCommandProblemError(fileName, message);
         }
-        return configuration;
-    }
-    else {
-        (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
         throw new Error(output.stderr);
     }
 }
