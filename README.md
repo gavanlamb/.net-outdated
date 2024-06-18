@@ -69,6 +69,7 @@ steps:
       add-pr-comment: true
       add-check-run: true
       frameworks: net5.0
+      pr-comment-name: net5.0
       target: ./test.sln
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -77,6 +78,7 @@ steps:
       add-pr-comment: true
       add-check-run: true
       frameworks: net6.0
+      pr-comment-name: net6.0
       target: ./test.sln
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
