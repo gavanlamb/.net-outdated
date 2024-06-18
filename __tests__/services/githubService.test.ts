@@ -55,7 +55,8 @@ describe("createCheckRun", () => {
         const status = CheckRunStatus.Completed;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
@@ -77,6 +78,7 @@ describe("createCheckRun", () => {
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(infoMock).toHaveBeenCalledWith("Creating a check run...");
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(getStringInputMock).toHaveBeenCalledTimes(1);
@@ -101,7 +103,8 @@ describe("createCheckRun", () => {
         const status = CheckRunStatus.Completed;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
@@ -123,6 +126,7 @@ describe("createCheckRun", () => {
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(infoMock).toHaveBeenCalledWith("Creating a check run...");
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(getStringInputMock).toHaveBeenCalledTimes(1);
@@ -145,7 +149,8 @@ describe("createCheckRun", () => {
         const status = CheckRunStatus.Completed;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
@@ -167,6 +172,7 @@ describe("createCheckRun", () => {
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(infoMock).toHaveBeenCalledWith("Creating a check run...");
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(getStringInputMock).toHaveBeenCalledTimes(1);
@@ -189,7 +195,8 @@ describe("createCheckRun", () => {
         const status = CheckRunStatus.Completed;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
@@ -211,6 +218,7 @@ describe("createCheckRun", () => {
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(infoMock).toHaveBeenCalledWith("Creating a check run...");
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(getStringInputMock).toHaveBeenCalledTimes(1);
@@ -232,7 +240,8 @@ describe("createCheckRun", () => {
 
         const debugMock = jest.fn();
         const errorMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock, error: errorMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, error: errorMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-check-run', false).mockReturnValueOnce(true);
@@ -255,6 +264,7 @@ describe("createCheckRun", () => {
 
         expect(getBooleanInputMock).toHaveBeenCalledTimes(2);
         expect(repoMock).toHaveBeenCalledTimes(2);
+        expect(infoMock).toHaveBeenCalledWith("Creating a check run...");
         expect(debugMock).toHaveBeenCalledWith(`owner: ${owner}`);
         expect(debugMock).toHaveBeenCalledWith(`repo: ${repo}`);
         expect(debugMock).toHaveBeenCalledTimes(2);
@@ -274,7 +284,8 @@ describe("addComment", () => {
         const body = "body";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(false);
@@ -295,8 +306,9 @@ describe("addComment", () => {
         const body = "body";
 
         const debugMock = jest.fn();
+        const infoMock = jest.fn();
         const warningMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock, warning: warningMock }));
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock, warning: warningMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -327,7 +339,8 @@ describe("addComment", () => {
         const repo = "repo";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock}));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -409,7 +422,8 @@ describe("addComment", () => {
         const repo = "repo";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock}));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -491,7 +505,8 @@ describe("addComment", () => {
         const repo = "repo";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock}));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -572,7 +587,8 @@ describe("addComment", () => {
         const repo = "repo";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock}));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -618,7 +634,8 @@ describe("addComment", () => {
         const repo = "repo";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock}));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockReturnValueOnce(true);
@@ -655,8 +672,9 @@ describe("addComment", () => {
         const body = "body";
         const errorMessage = "Error message";
 
+        const debugMock = jest.fn();
         const errorMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ error: errorMock }));
+        jest.doMock("@actions/core", () => ({ debug: debugMock, error: errorMock }));
 
         const getBooleanInputMock = jest.fn();
         when(getBooleanInputMock).calledWith('add-pr-comment', false).mockImplementationOnce(()=> { throw new Error(errorMessage); });

@@ -83,7 +83,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -103,7 +104,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
@@ -184,7 +185,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -199,7 +201,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
@@ -270,7 +272,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -285,7 +288,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
@@ -366,7 +369,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -382,7 +386,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
@@ -465,7 +469,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -481,7 +486,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view " +
             "## project.csproj\n" +
@@ -527,7 +532,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({ getFileName: getFileNameMock }));
@@ -538,7 +544,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
@@ -557,7 +563,8 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({ getFileName: getFileNameMock }));
@@ -568,7 +575,7 @@ describe("getDetailedBody", () => {
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
@@ -582,14 +589,15 @@ describe("getDetailedBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         jest.doMock("semver-diff", () => {});
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate detailed view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating detailed view...");
         expect(debugMock).toHaveBeenCalledWith("Generated detailed view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });
@@ -673,7 +681,8 @@ describe("getSummaryBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -684,7 +693,7 @@ describe("getSummaryBody", () => {
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating summary view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
             "| Project Name | Type | Count |\n" +
@@ -883,7 +892,8 @@ describe("getSummaryBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -894,7 +904,7 @@ describe("getSummaryBody", () => {
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating summary view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
             "| Project Name | Type | Count |\n" +
@@ -957,7 +967,8 @@ describe("getSummaryBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -968,7 +979,7 @@ describe("getSummaryBody", () => {
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating summary view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
           "| Project Name | Type | Count |\n" +
@@ -1019,7 +1030,8 @@ describe("getSummaryBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -1030,7 +1042,7 @@ describe("getSummaryBody", () => {
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating summary view...");
         expect(getFileNameMock).toHaveBeenCalledWith("/path/to/project.csproj");
         expect(debugMock).toHaveBeenCalledWith("Generated summary view " +
           "| Project Name | Type | Count |\n" +
@@ -1054,7 +1066,8 @@ describe("getSummaryBody", () => {
         };
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
@@ -1065,7 +1078,7 @@ describe("getSummaryBody", () => {
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
 
-        expect(debugMock).toHaveBeenCalledWith("Going to generate summary view...");
+        expect(infoMock).toHaveBeenCalledWith("Generating summary view...");
         expect(debugMock).toHaveBeenCalledWith("Generated summary view All packages are up-to-date with the latest versions");
         expect(result).toContain("All packages are up-to-date with the latest versions");
     });

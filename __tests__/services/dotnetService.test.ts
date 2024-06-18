@@ -93,7 +93,8 @@ describe("listOutdatedPackages", () => {
         const target = "target";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getStringInputMock = jest.fn();
         when(getStringInputMock).calledWith('target').mockImplementationOnce(() => target);
@@ -148,6 +149,7 @@ describe("listOutdatedPackages", () => {
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
         expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
+        expect(infoMock).toHaveBeenCalledWith("Determining outdated packages...");
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs, { silent: true });
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);
@@ -237,7 +239,8 @@ describe("listOutdatedPackages", () => {
         const target = null;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getStringInputMock = jest.fn();
         when(getStringInputMock).calledWith('target').mockImplementationOnce(() => target);
@@ -279,6 +282,7 @@ describe("listOutdatedPackages", () => {
         expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs, { silent: true });
+        expect(infoMock).toHaveBeenCalledWith("Determining outdated packages...");
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the output is ${stdout}`);
         expect(result).toStrictEqual(configuration);
@@ -297,7 +301,8 @@ describe("listOutdatedPackages", () => {
         const target = null;
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getStringInputMock = jest.fn();
         when(getStringInputMock).calledWith('target').mockImplementationOnce(() => target);
@@ -338,6 +343,7 @@ describe("listOutdatedPackages", () => {
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
         expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
+        expect(infoMock).toHaveBeenCalledWith("Determining outdated packages...");
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs, { silent: true });
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);
@@ -374,7 +380,8 @@ describe("listOutdatedPackages", () => {
         const target = "target";
 
         const debugMock = jest.fn();
-        jest.doMock("@actions/core", () => ({ debug: debugMock }));
+        const infoMock = jest.fn();
+        jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
         const getStringInputMock = jest.fn();
         when(getStringInputMock).calledWith('target').mockImplementationOnce(() => target);
@@ -430,6 +437,7 @@ describe("listOutdatedPackages", () => {
         expect(getBooleanInputMock).toHaveBeenCalledWith('include-highest-minor-only', false);
         expect(getStringArrayInputMock).toHaveBeenCalledWith('nuget-sources');
         expect(getStringArrayInputMock).toHaveBeenCalledWith('frameworks');
+        expect(infoMock).toHaveBeenCalledWith("Determining outdated packages...");
         expect(debugMock).toHaveBeenCalledWith(`Going to execute "dotnet ${expectedArgs.join(" ")}"`);
         expect(getExecOutputMock).toHaveBeenCalledWith('dotnet', expectedArgs, { silent: true });
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the status code is ${exitCode}`);

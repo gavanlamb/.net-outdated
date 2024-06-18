@@ -10,7 +10,8 @@ import {
     Configuration
 } from "../types/configuration";
 import {
-    debug
+    debug,
+    info
 } from "@actions/core";
 import {
     getFileName
@@ -121,6 +122,8 @@ function getFrameworkArguments(): string[] {
  * @returns the
  */
 async function listOutdatedPackages(): Promise<Configuration> {
+    info("Determining outdated packages...");
+
     const args: string[] = [
         'list',
         getTargetArgument(),

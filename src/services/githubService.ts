@@ -1,6 +1,7 @@
 import {
     debug,
     error,
+    info,
     warning
 } from '@actions/core';
 import {
@@ -75,6 +76,7 @@ async function createCheckRun(
             debug('Check run is disabled');
             return;
         }
+        info("Creating a check run...");
 
         const addFailCheckIfContainsOutdatedArgument = getBooleanInput('fail-check-run-if-contains-outdated', false);
 
@@ -136,6 +138,7 @@ async function addComment(
             warning('This action cannot add a comment as the run is not for a PR');
             return;
         }
+        info("Adding PR comment...");
 
         const owner  = context.repo.owner;
         debug(`owner: ${owner}`);
