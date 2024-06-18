@@ -12,6 +12,7 @@ import {
 } from "../types/dependencyType";
 import * as semverDiff from "semver-diff";
 import {
+    info,
     debug
 } from "@actions/core";
 
@@ -43,7 +44,7 @@ function getFormattedVersion(
 function getDetailedBody(
     configuration: Configuration): string
 {
-    debug('Going to generate detailed view...');
+    info('Generating detailed view...');
 
     let markdown = "";
 
@@ -130,7 +131,7 @@ function getDetailedBody(
 function getSummaryBody(
     configuration: Configuration): string
 {
-    debug('Going to generate summary view...');
+    info('Generating summary view...');
 
     let markdown = "";
 
