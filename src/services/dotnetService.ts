@@ -140,25 +140,25 @@ async function listOutdatedPackages(): Promise<Configuration> {
     ].filter(arg => arg !== '');
 
     debug(`Going to execute "dotnet ${args.join(" ")}"`);
-    const output = await getExecOutput('dotnet', args);
+    const output = await getExecOutput('dotnet', args, { silent: true });
     debug(`Executed "dotnet ${args.join(" ")}" and the status code is ${output.exitCode}`);
 
     if(output.exitCode === 0)
     {
         debug(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stdout}`);
-        const configuration =  JSON.parse(output.stdout) as Configuration;
+        return JSON.parse(output.stdout) as Configuration;
+    }
+    else
+    {
+        debug(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
+        const configuration = JSON.parse(output.stderr) as Configuration;
         if(configuration.problems && configuration.problems.length > 0)
         {
             const problem = configuration.problems[0];
             const fileName = getFileName(problem.project);
             const message = problem.text.replace(problem.project, fileName);
-            throw new DotnetOutdatedCommandProblem(fileName, message);
+            throw new DotnetOutdatedCommandProblemError(fileName, message);
         }
-        return configuration;
-    }
-    else
-    {
-        debug(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
         throw new Error(output.stderr);
     }
 }
