@@ -1,5 +1,6 @@
 # .Net outdated 
 [![Release](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml/badge.svg)](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml)
+[![wakatime](https://wakatime.com/badge/github/gavanlamb/.net-outdated.svg)](https://wakatime.com/badge/github/gavanlamb/.net-outdated)
 
 This action checks for outdated dependencies in a .NET project or solution. 
 
@@ -68,6 +69,7 @@ steps:
       add-pr-comment: true
       add-check-run: true
       frameworks: net5.0
+      pr-comment-name: net5.0
       target: ./test.sln
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,6 +78,7 @@ steps:
       add-pr-comment: true
       add-check-run: true
       frameworks: net6.0
+      pr-comment-name: net6.0
       target: ./test.sln
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

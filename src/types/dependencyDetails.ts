@@ -1,4 +1,6 @@
-import { DependencyType } from "./dependencyType";
+import {
+    DependencyType
+} from "./dependencyType";
 import * as semverDiff from "semver-diff";
 
 interface dependencyDetails {

@@ -7,7 +7,8 @@ import {
     context
 } from '@actions/github';
 import {
-    getBooleanInput, getStringInput
+    getBooleanInput,
+    getStringInput
 } from "../helpers/inputHelper";
 import {
     createComment,

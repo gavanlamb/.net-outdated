@@ -1,3 +1,5 @@
-import {run} from "./services/outdatedService";
+import {
+    run
+} from "./services/outdatedService";
 
 run();

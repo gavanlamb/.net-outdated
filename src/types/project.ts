@@ -1,4 +1,6 @@
-import { FrameworkInfo } from "./frameworkInfo";
+import {
+    FrameworkInfo
+} from "./frameworkInfo";
 
 interface Project {
     path: string;

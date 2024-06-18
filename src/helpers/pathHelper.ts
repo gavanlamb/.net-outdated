@@ -1,5 +1,10 @@
-import { basename, extname } from "node:path";
-import { debug } from "@actions/core";
+import {
+    basename,
+    extname
+} from "node:path";
+import {
+    debug
+} from "@actions/core";
 
 function getFileName(
     filePath: string): string {

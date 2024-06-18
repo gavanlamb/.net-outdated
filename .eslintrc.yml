@@ -15,6 +15,7 @@ ignorePatterns:
   - '*.json'
   - '**/.qodana'
   - '**/test-results'
+  - '**/sample'
 
 parser: '@typescript-eslint/parser'
 
