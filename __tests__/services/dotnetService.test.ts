@@ -1,5 +1,9 @@
-import {when} from "jest-when";
-import {Configuration} from "../../src/types/configuration";
+import {
+    when
+} from "jest-when";
+import {
+    Configuration
+} from "../../src/types/configuration";
 
 describe("listOutdatedPackages", () => {
     beforeEach(() => {

@@ -1,4 +1,6 @@
-import {Configuration} from "../../src/types/configuration";
+import {
+    Configuration
+} from "../../src/types/configuration";
 
 describe("run", () => {
     beforeEach(() => {

@@ -1,9 +1,19 @@
-import { Configuration } from "../types/configuration";
-import { getFileName } from "../helpers/pathHelper";
-import { dependencyDetails } from "../types/dependencyDetails";
-import { DependencyType } from "../types/dependencyType";
+import {
+    Configuration
+} from "../types/configuration";
+import {
+    getFileName
+} from "../helpers/pathHelper";
+import {
+    dependencyDetails
+} from "../types/dependencyDetails";
+import {
+    DependencyType
+} from "../types/dependencyType";
 import * as semverDiff from "semver-diff";
-import { debug } from "@actions/core";
+import {
+    debug
+} from "@actions/core";
 
 function getFormattedVersion(
     difference: semverDiff.Difference | undefined,

@@ -1,5 +1,10 @@
-import { debug, getInput } from '@actions/core';
-import { InvalidGitHubActionsInputError } from "../errors/invalidGitHubActionsInputError";
+import {
+    debug,
+    getInput
+} from '@actions/core';
+import {
+    InvalidGitHubActionsInputError
+} from "../errors/invalidGitHubActionsInputError";
 
 /**
  * Gets a boolean input from the GitHub Actions workflow.
