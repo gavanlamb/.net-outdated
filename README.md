@@ -1,5 +1,6 @@
 # .Net outdated 
 [![Release](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml/badge.svg)](https://github.com/gavanlamb/.net-outdated/actions/workflows/release.yml)
+[![wakatime](https://wakatime.com/badge/github/gavanlamb/.net-outdated.svg)](https://wakatime.com/badge/github/gavanlamb/.net-outdated)
 
 This action checks for outdated dependencies in a .NET project or solution. 
 
