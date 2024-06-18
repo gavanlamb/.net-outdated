@@ -73,3 +73,28 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           use-annotations: true
+  test-action:
+    name: Test Action
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Restore
+        run: dotnet restore --no-cache ./sample/WebApplication/WebApplication.sln
+
+      - name: Test Action
+        id: test-action
+        uses: ./
+        with:
+          add-pr-comment: true
+          add-check-run: true
+          target: ./sample/WebApplication/WebApplication.sln
+          fail-check-run-if-contains-outdated: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
