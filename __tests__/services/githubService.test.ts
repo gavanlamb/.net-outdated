@@ -1,7 +1,15 @@
-import { when } from 'jest-when';
-import {CheckRunStatus} from "../../src/types/checkRunStatus";
-import {CheckConclusion} from "../../src/types/checkConclusion";
-import {components} from "@octokit/openapi-types";
+import {
+    when
+} from 'jest-when';
+import {
+    CheckRunStatus
+} from "../../src/types/checkRunStatus";
+import {
+    CheckConclusion
+} from "../../src/types/checkConclusion";
+import {
+    components
+} from "@octokit/openapi-types";
 
 describe("createCheckRun", () => {
     beforeEach(() => {

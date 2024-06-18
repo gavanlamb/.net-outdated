@@ -1,6 +1,12 @@
-import {NugetSource} from "./nugetSource";
-import {Problem} from "./problem";
-import {Project} from "./project";
+import {
+    NugetSource
+} from "./nugetSource";
+import {
+    Problem
+} from "./problem";
+import {
+    Project
+} from "./project";
 
 interface Configuration {
     version: number;

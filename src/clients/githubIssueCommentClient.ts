@@ -1,6 +1,12 @@
-import { debug } from "@actions/core";
-import { components } from "@octokit/openapi-types";
-import { createOctokitClient } from "./octokit";
+import {
+    debug
+} from "@actions/core";
+import {
+    components
+} from "@octokit/openapi-types";
+import {
+    createOctokitClient
+} from "./octokit";
 
 /**
  * Create an issue comment on a PR

@@ -1,7 +1,15 @@
-import { debug } from "@actions/core";
-import { CheckRunStatus } from "../types/checkRunStatus";
-import { CheckConclusion } from "../types/checkConclusion";
-import { createOctokitClient } from "./octokit";
+import {
+    debug
+} from "@actions/core";
+import {
+    CheckRunStatus
+} from "../types/checkRunStatus";
+import {
+    CheckConclusion
+} from "../types/checkConclusion";
+import {
+    createOctokitClient
+} from "./octokit";
 /**
  * Create an issue comment on a PR
  * @param owner owner of the repo

@@ -1,4 +1,6 @@
-import {PackageInfo} from "./packageInfo";
+import {
+    PackageInfo
+} from "./packageInfo";
 
 interface FrameworkInfo {
     framework: string;

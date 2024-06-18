@@ -1,5 +1,9 @@
-import { Octokit } from "octokit";
-import { debug } from "@actions/core";
+import {
+    Octokit
+} from "octokit";
+import {
+    debug
+} from "@actions/core";
 
 /**
  * Create and get the Octokit client

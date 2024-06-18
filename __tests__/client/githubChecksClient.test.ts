@@ -1,5 +1,9 @@
-import { CheckRunStatus } from "../../src/types/checkRunStatus";
-import { CheckConclusion } from "../../src/types/checkConclusion";
+import {
+    CheckRunStatus
+} from "../../src/types/checkRunStatus";
+import {
+    CheckConclusion
+} from "../../src/types/checkConclusion";
 
 describe("createCheck", () => {
     beforeEach(() => {
