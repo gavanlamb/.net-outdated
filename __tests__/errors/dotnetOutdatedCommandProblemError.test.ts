@@ -12,7 +12,7 @@ describe('DotnetOutdatedCommandProblemError', () => {
         const error = new DotnetOutdatedCommandProblemError(projectName, message);
 
         expect(error).toBeInstanceOf(DotnetOutdatedCommandProblemError);
-        expect(error.name).toBe('DotnetOutdatedCommandProblem');
+        expect(error.name).toBe('DotnetOutdatedCommandProblemError');
         expect(error.projectName).toBe(projectName);
         expect(error.message).toBe(message);
     });
