@@ -51973,6 +51973,7 @@ async function createCheckRun(summary, body, hasAny) {
             (0,core.debug)('Check run is disabled');
             return;
         }
+        (0,core.info)("Creating a check run...");
         const addFailCheckIfContainsOutdatedArgument = getBooleanInput('fail-check-run-if-contains-outdated', false);
         const owner = github.context.repo.owner;
         (0,core.debug)(`owner: ${owner}`);
@@ -52011,6 +52012,7 @@ async function addComment(body) {
             (0,core.warning)('This action cannot add a comment as the run is not for a PR');
             return;
         }
+        (0,core.info)("Adding PR comment...");
         const owner = github.context.repo.owner;
         (0,core.debug)(`owner: ${owner}`);
         const repo = github.context.repo.repo;
@@ -52183,6 +52185,7 @@ function getFrameworkArguments() {
  * @returns the
  */
 async function listOutdatedPackages() {
+    (0,core.info)("Determining outdated packages...");
     const args = [
         'list',
         getTargetArgument(),
@@ -52272,7 +52275,7 @@ function getFormattedVersion(difference, version) {
  * @param configuration to generate the detailed body for
  */
 function getDetailedBody(configuration) {
-    (0,core.debug)('Going to generate detailed view...');
+    (0,core.info)('Generating detailed view...');
     let markdown = "";
     for (const project of configuration.projects) {
         const frameworks = project.frameworks ?? [];
@@ -52335,7 +52338,7 @@ function getDetailedBody(configuration) {
  * @param configuration to generate the summary body for
  */
 function getSummaryBody(configuration) {
-    (0,core.debug)('Going to generate summary view...');
+    (0,core.info)('Generating summary view...');
     let markdown = "";
     for (const project of configuration.projects) {
         const frameworks = project.frameworks ?? [];
