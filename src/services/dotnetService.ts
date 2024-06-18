@@ -16,8 +16,8 @@ import {
     getFileName
 } from '../helpers/pathHelper';
 import {
-    DotnetOutdatedCommandProblem
-} from '../errors/dotnetOutdatedCommandProblem';
+    DotnetOutdatedCommandProblemError
+} from '../errors/dotnetOutdatedCommandProblemError';
 
 /**
  * Gets the packages-to-exclude argument from the action
