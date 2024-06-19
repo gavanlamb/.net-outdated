@@ -90,3 +90,4 @@ steps:
 ## How to contribute
 
 If you would like to contribute please see [CONTRIBUTING](https://github.com/gavanlamb/.net-outdated/blob/main/CONTRIBUTING.md).
+
