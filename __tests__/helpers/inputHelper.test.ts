@@ -80,7 +80,7 @@ describe('getBooleanInput', () => {
         ['invalid'],
         ['F A L S E'],
         ['T R U E']
-    ])('should throw an InvalidGitHubActionsInputError when the input is "%s"', async (value: string) => {
+    ])('should throw an InvalidGitHubActionInputError when the input is "%s"', async (value: string) => {
         const name = "inputName";
 
         const debugMock = jest.fn();

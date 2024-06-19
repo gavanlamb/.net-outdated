@@ -17,6 +17,9 @@ import {
     getFileName
 } from '../helpers/pathHelper';
 import {
+    DotnetCommandProblemError
+} from '../errors/dotnetCommandProblemError';
+import {
     isValidJSON
 } from '../helpers/jsonHelper';
 
