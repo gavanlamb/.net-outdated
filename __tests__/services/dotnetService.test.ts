@@ -350,7 +350,7 @@ describe("listOutdatedPackages", () => {
         expect(debugMock).toHaveBeenCalledWith(`Executed "dotnet ${expectedArgs.join(" ")}" and the output is ${stderr}`);
     });
 
-    it("should throw an DotnetOutdatedCommandProblemError when there are problems", async () => {
+    it("should throw an DotnetCommandProblemError when there are problems", async () => {
         const configuration: Configuration = {
             parameters: "-outdated",
             version: 1,

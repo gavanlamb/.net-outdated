@@ -1,6 +1,6 @@
 {
   "name": "dotnet-outdated",
-  "description": "Dotnet outdated GitHub Actions",
+  "description": "Dotnet outdated GitHub Action",
   "version": "0.0.0",
   "author": "Gavan Lamb",
   "homepage": "https://github.com/marketplace/actions/dotnet-outdated",

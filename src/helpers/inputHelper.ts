@@ -3,8 +3,8 @@ import {
     getInput
 } from '@actions/core';
 import {
-    InvalidGitHubActionsInputError
-} from "../errors/invalidGitHubActionsInputError";
+    InvalidGitHubActionInputError
+} from "../errors/invalidGitHubActionInputError";
 
 /**
  * Gets a boolean input from the GitHub Actions workflow.
@@ -26,7 +26,7 @@ function getBooleanInput(
 
     const lowerValueStr = valueStr.toLowerCase();
     if (lowerValueStr !== 'true' && lowerValueStr !== 'false') {
-        throw new InvalidGitHubActionsInputError(
+        throw new InvalidGitHubActionInputError(
             inputName,
             `The retrieved boolean value for: ${inputName} is ${valueStr}, expected values are 'true' or 'false'`);
     }
@@ -55,7 +55,7 @@ function getIntegerInput(
 
     const value = parseInt(valueStr, 10);
     if (isNaN(value))
-        throw new InvalidGitHubActionsInputError(
+        throw new InvalidGitHubActionInputError(
             inputName,
             `The retrieved integer value for: ${inputName} is ${valueStr}, which is deemed to be a NaN`);
     debug(`The retrieved integer input value for: ${inputName} parsed to: '${value}'`);
@@ -118,7 +118,7 @@ function getStringInputAndValidateAgainstAllowedValues(
         }
     }
 
-    throw new InvalidGitHubActionsInputError(
+    throw new InvalidGitHubActionInputError(
         inputName,
         `The retrieved string value for: ${inputName} is ${value}, which is not one of the expected values ${allowedValues.join(', ')}.`);
 }
