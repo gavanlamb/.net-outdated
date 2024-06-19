@@ -37157,15 +37157,15 @@ __nccwpck_require__.r(__webpack_exports__);
 var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
-;// CONCATENATED MODULE: ./src/errors/invalidGitHubActionsInputError.ts
+;// CONCATENATED MODULE: ./src/errors/invalidGitHubActionInputError.ts
 /**
  * Error indicating a GitHub Actions Input error
  */
-class invalidGitHubActionsInputError_InvalidGitHubActionsInputError extends Error {
+class invalidGitHubActionInputError_InvalidGitHubActionInputError extends Error {
     inputName;
     constructor(inputName, message) {
         super(message);
-        this.name = 'InvalidGitHubActionsInputError';
+        this.name = 'InvalidGitHubActionInputError';
         this.inputName = inputName;
     }
 }
@@ -37189,7 +37189,7 @@ function getBooleanInput(inputName, defaultValue) {
     }
     const lowerValueStr = valueStr.toLowerCase();
     if (lowerValueStr !== 'true' && lowerValueStr !== 'false') {
-        throw new invalidGitHubActionsInputError_InvalidGitHubActionsInputError(inputName, `The retrieved boolean value for: ${inputName} is ${valueStr}, expected values are 'true' or 'false'`);
+        throw new invalidGitHubActionInputError_InvalidGitHubActionInputError(inputName, `The retrieved boolean value for: ${inputName} is ${valueStr}, expected values are 'true' or 'false'`);
     }
     const value = lowerValueStr === 'true';
     (0,core.debug)(`The retrieved boolean input value for: ${inputName} parsed to: '${value}'`);
@@ -37209,7 +37209,7 @@ function getIntegerInput(inputName) {
     }
     const value = parseInt(valueStr, 10);
     if (isNaN(value))
-        throw new InvalidGitHubActionsInputError(inputName, `The retrieved integer value for: ${inputName} is ${valueStr}, which is deemed to be a NaN`);
+        throw new InvalidGitHubActionInputError(inputName, `The retrieved integer value for: ${inputName} is ${valueStr}, which is deemed to be a NaN`);
     debug(`The retrieved integer input value for: ${inputName} parsed to: '${value}'`);
     return value;
 }
@@ -37254,7 +37254,7 @@ function getStringInputAndValidateAgainstAllowedValues(inputName, allowedValues)
             return value;
         }
     }
-    throw new InvalidGitHubActionsInputError(inputName, `The retrieved string value for: ${inputName} is ${value}, which is not one of the expected values ${allowedValues.join(', ')}.`);
+    throw new InvalidGitHubActionInputError(inputName, `The retrieved string value for: ${inputName} is ${value}, which is not one of the expected values ${allowedValues.join(', ')}.`);
 }
 
 
@@ -52071,21 +52071,34 @@ function getFileName(filePath) {
 }
 
 
-;// CONCATENATED MODULE: ./src/errors/dotnetOutdatedCommandProblemError.ts
+;// CONCATENATED MODULE: ./src/errors/dotnetCommandProblemError.ts
 /**
  * Error indicating a dotnet outdated command problem
  */
-class DotnetOutdatedCommandProblemError extends Error {
+class DotnetCommandProblemError extends Error {
     projectName;
     constructor(projectName, message) {
         super(message);
-        this.name = 'DotnetOutdatedCommandProblemError';
+        this.name = 'DotnetCommandProblemError';
         this.projectName = projectName;
     }
 }
 
 
+;// CONCATENATED MODULE: ./src/helpers/jsonHelper.ts
+function isValidJSON(input) {
+    try {
+        JSON.parse(input);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+}
+
+
 ;// CONCATENATED MODULE: ./src/services/dotnetService.ts
+
 
 
 
@@ -52212,12 +52225,14 @@ async function listOutdatedPackages() {
     }
     else {
         (0,core.debug)(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
-        const configuration = JSON.parse(output.stderr);
-        if (configuration.problems && configuration.problems.length > 0) {
-            const problem = configuration.problems[0];
-            const fileName = getFileName(problem.project);
-            const message = problem.text.replace(problem.project, fileName);
-            throw new DotnetOutdatedCommandProblemError(fileName, message);
+        if (isValidJSON(output.stderr)) {
+            const configuration = JSON.parse(output.stderr);
+            if (configuration.problems && configuration.problems.length > 0) {
+                const problem = configuration.problems[0];
+                const fileName = getFileName(problem.project);
+                const message = problem.text.replace(problem.project, fileName);
+                throw new DotnetCommandProblemError(fileName, message);
+            }
         }
         throw new Error(output.stderr);
     }
