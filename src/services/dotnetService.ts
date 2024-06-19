@@ -17,8 +17,8 @@ import {
     getFileName
 } from '../helpers/pathHelper';
 import {
-    DotnetOutdatedCommandProblemError
-} from '../errors/dotnetOutdatedCommandProblemError';
+    isValidJSON
+} from '../helpers/jsonHelper';
 
 /**
  * Gets the packages-to-exclude argument from the action
@@ -154,13 +154,15 @@ async function listOutdatedPackages(): Promise<Configuration> {
     else
     {
         debug(`Executed "dotnet ${args.join(" ")}" and the output is ${output.stderr}`);
-        const configuration = JSON.parse(output.stderr) as Configuration;
-        if(configuration.problems && configuration.problems.length > 0)
-        {
-            const problem = configuration.problems[0];
-            const fileName = getFileName(problem.project);
-            const message = problem.text.replace(problem.project, fileName);
-            throw new DotnetOutdatedCommandProblemError(fileName, message);
+        if(isValidJSON(output.stderr)){
+            const configuration = JSON.parse(output.stderr) as Configuration;
+            if(configuration.problems && configuration.problems.length > 0)
+            {
+                const problem = configuration.problems[0];
+                const fileName = getFileName(problem.project);
+                const message = problem.text.replace(problem.project, fileName);
+                throw new DotnetCommandProblemError(fileName, message);
+            }
         }
         throw new Error(output.stderr);
     }
