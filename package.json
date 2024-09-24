@@ -38,14 +38,14 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^6.0.0",
     "octokit": "^4.0.2",
-    "semver-diff": "^4.0.0"
+    "semver": "^7.6.3"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
     "@jest/types": "^29.6.3",
     "@types/node": "^20.12.12",
-    "@types/jest-when": "^3.5.5",
+    "@types/semver": "^7.5.8",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "@vercel/ncc": "^0.38.1",

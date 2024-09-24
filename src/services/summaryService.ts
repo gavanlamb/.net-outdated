@@ -10,30 +10,32 @@ import {
 import {
     DependencyType
 } from "../types/dependencyType";
-import * as semverDiff from "semver-diff";
 import {
     info,
     debug
 } from "@actions/core";
+import {
+    getVersion
+} from "./versionService";
+import {ReleaseType} from "semver";
 
 function getFormattedVersion(
-    difference: semverDiff.Difference | undefined,
+    difference: ReleaseType | null,
     version: string): string
 {
     switch (difference) {
-    case "premajor":
-    case "major":
-        return `\$\\textcolor{red}{\\textsf{${version}}}\$`;
-    case "preminor":
-    case "minor":
-        return `\$\\textcolor{yellow}{\\textsf{${version}}}\$`;
-    case "prepatch":
-    case "patch":
-    case "build":
-    case "prerelease":
-        return `\$\\textcolor{green}{\\textsf{${version}}}\$`;
-    default:
-        return version;
+        case "premajor":
+        case "major":
+            return `\$\\textcolor{red}{\\textsf{${version}}}\$`;
+        case "preminor":
+        case "minor":
+            return `\$\\textcolor{yellow}{\\textsf{${version}}}\$`;
+        case "prepatch":
+        case "patch":
+        case "prerelease":
+            return `\$\\textcolor{green}{\\textsf{${version}}}\$`;
+        default:
+            return version;
     }
 }
 
@@ -67,7 +69,7 @@ function getDetailedBody(
                     {
                         ...topLevelPackage,
                         type: DependencyType.TopLevel,
-                        versionDifference: semverDiff.default(topLevelPackage.requestedVersion!, topLevelPackage.latestVersion)
+                        versionDifference: getVersion(topLevelPackage.requestedVersion, topLevelPackage.latestVersion)
                     }
                 );
             }
@@ -79,7 +81,7 @@ function getDetailedBody(
                     {
                         ...transitivePackage,
                         type: DependencyType.Transitive,
-                        versionDifference: semverDiff.default(transitivePackage.resolvedVersion, transitivePackage.latestVersion)
+                        versionDifference: getVersion(transitivePackage.resolvedVersion, transitivePackage.latestVersion)
                     }
                 );
             }

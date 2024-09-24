@@ -1,7 +1,9 @@
 import {
     DependencyType
 } from "./dependencyType";
-import * as semverDiff from "semver-diff";
+import {
+    ReleaseType
+} from "semver";
 
 interface dependencyDetails {
     id: string;
@@ -9,7 +11,7 @@ interface dependencyDetails {
     resolvedVersion: string;
     latestVersion: string;
     type: DependencyType;
-    versionDifference?: semverDiff.Difference;
+    versionDifference: ReleaseType | null;
 }
 
 export {
