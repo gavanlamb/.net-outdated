@@ -67,11 +67,6 @@ describe("getDetailedBody", () => {
                                 },
                                 {
                                     id: "PackageH",
-                                    resolvedVersion: "1.0.0",
-                                    latestVersion: "1.0.0+foo"
-                                },
-                                {
-                                    id: "PackageI",
                                     resolvedVersion: "1.0.1",
                                     latestVersion: "1.0.0"
                                 }
@@ -89,17 +84,16 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        when(semverDiffMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
-        when(semverDiffMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
-        when(semverDiffMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.0+foo").mockReturnValue("build");
-        when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        when(getVersionMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
+        when(getVersionMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
+        when(getVersionMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
+        when(getVersionMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
+        when(getVersionMock).calledWith("1.0.1", "1.0.0").mockReturnValue(null);
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -120,8 +114,7 @@ describe("getDetailedBody", () => {
             "| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |\n" +
             "| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |\n" +
             "| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |\n" +
-            "| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |\n" +
-            "| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
+            "| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
             "\n" +
             "> __Note__\n" +
             ">\n" +
@@ -140,8 +133,7 @@ describe("getDetailedBody", () => {
         expect(result).toContain("| PackageE | Top Level | 1.0.0 | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.1}}$ | Patch |");
         expect(result).toContain("| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |");
         expect(result).toContain("| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |");
-        expect(result).toContain("| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |");
-        expect(result).toContain("| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |");
+        expect(result).toContain("| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |");
     });
 
     it("should return a detailed markdown view for a given configuration when topLevelPackages is undefined", async () => {
@@ -169,11 +161,6 @@ describe("getDetailedBody", () => {
                                 },
                                 {
                                     id: "PackageH",
-                                    resolvedVersion: "1.0.0",
-                                    latestVersion: "1.0.0+foo"
-                                },
-                                {
-                                    id: "PackageI",
                                     resolvedVersion: "1.0.1",
                                     latestVersion: "1.0.0"
                                 }
@@ -191,12 +178,11 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.0+foo").mockReturnValue("build");
-        when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
+        when(getVersionMock).calledWith("1.0.1", "1.0.0").mockReturnValue(null);
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -212,8 +198,7 @@ describe("getDetailedBody", () => {
             "|---|---|---:|---:|---:|---:|\n" +
             "| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |\n" +
             "| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |\n" +
-            "| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |\n" +
-            "| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
+            "| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
             "\n" +
             "> __Note__\n" +
             ">\n" +
@@ -227,8 +212,7 @@ describe("getDetailedBody", () => {
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
         expect(result).toContain("| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |");
         expect(result).toContain("| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |");
-        expect(result).toContain("| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |");
-        expect(result).toContain("| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |");
+        expect(result).toContain("| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |");
     });
 
     it("should return a detailed markdown view for a given configuration when topLevelPackages is empty", async () => {
@@ -256,11 +240,6 @@ describe("getDetailedBody", () => {
                                 },
                                 {
                                     id: "PackageH",
-                                    resolvedVersion: "1.0.0",
-                                    latestVersion: "1.0.0+foo"
-                                },
-                                {
-                                    id: "PackageI",
                                     resolvedVersion: "1.0.1",
                                     latestVersion: "1.0.0"
                                 }
@@ -278,12 +257,11 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.0+foo").mockReturnValue("build");
-        when(semverDiffMock).calledWith("1.0.1", "1.0.0").mockReturnValue(undefined);
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.1").mockReturnValue("prepatch");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.0.0-foo.bar").mockReturnValue("prerelease");
+        when(getVersionMock).calledWith("1.0.1", "1.0.0").mockReturnValue(null);
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -299,8 +277,7 @@ describe("getDetailedBody", () => {
             "|---|---|---:|---:|---:|---:|\n" +
             "| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |\n" +
             "| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |\n" +
-            "| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |\n" +
-            "| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
+            "| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |\n" +
             "\n" +
             "> __Note__\n" +
             ">\n" +
@@ -314,8 +291,7 @@ describe("getDetailedBody", () => {
         expect(result).toContain("| Package name | Type | Request version | Resolved version | Latest version | Severity |");
         expect(result).toContain("| PackageF | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.1}}$ | Prepatch |");
         expect(result).toContain("| PackageG | Transitive |  | 1.0.0-foo | $\\textcolor{green}{\\textsf{1.0.0-foo.bar}}$ | Prerelease |");
-        expect(result).toContain("| PackageH | Transitive |  | 1.0.0 | $\\textcolor{green}{\\textsf{1.0.0+foo}}$ | Build |");
-        expect(result).toContain("| PackageI | Transitive |  | 1.0.1 | 1.0.0 |  |");
+        expect(result).toContain("| PackageH | Transitive |  | 1.0.1 | 1.0.0 |  |");
     });
 
     it("should return a detailed markdown view for a given configuration when transitivePackages is undefined", async () => {
@@ -375,13 +351,13 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        when(semverDiffMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
-        when(semverDiffMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
-        when(semverDiffMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        when(getVersionMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
+        when(getVersionMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
+        when(getVersionMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
+        when(getVersionMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -475,13 +451,13 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        when(semverDiffMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
-        when(semverDiffMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
-        when(semverDiffMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
-        when(semverDiffMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
-        when(semverDiffMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        when(getVersionMock).calledWith("1.0.0", "2.0.0").mockReturnValue("major");
+        when(getVersionMock).calledWith("1.0.0-foo", "2.0.0").mockReturnValue("premajor");
+        when(getVersionMock).calledWith("1.0.0", "1.1.0").mockReturnValue("minor");
+        when(getVersionMock).calledWith("1.0.0-foo", "1.1.0").mockReturnValue("preminor");
+        when(getVersionMock).calledWith("1.0.0", "1.0.1").mockReturnValue("patch");
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -538,8 +514,8 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({ getFileName: getFileNameMock }));
 
-        const semverDiffMock = jest.fn().mockReturnValue(null);
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn().mockReturnValue(null);
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -569,8 +545,8 @@ describe("getDetailedBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({ getFileName: getFileNameMock }));
 
-        const semverDiffMock = jest.fn().mockReturnValue(null);
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn().mockReturnValue(null);
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -592,7 +568,7 @@ describe("getDetailedBody", () => {
         const infoMock = jest.fn();
         jest.doMock("@actions/core", () => ({ debug: debugMock, info: infoMock }));
 
-        jest.doMock("semver-diff", () => {});
+        jest.doMock("../../src/services/versionService", () => {});
 
         const { getDetailedBody } = await import("../../src/services/summaryService");
         const result = getDetailedBody(configuration);
@@ -687,8 +663,8 @@ describe("getSummaryBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
@@ -898,8 +874,8 @@ describe("getSummaryBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
@@ -973,8 +949,8 @@ describe("getSummaryBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
@@ -1036,8 +1012,8 @@ describe("getSummaryBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
@@ -1072,8 +1048,8 @@ describe("getSummaryBody", () => {
         const getFileNameMock = jest.fn().mockReturnValue("project.csproj");
         jest.doMock("../../src/helpers/pathHelper", () => ({getFileName: getFileNameMock}));
 
-        const semverDiffMock = jest.fn();
-        jest.doMock("semver-diff", () => ({ __esModule: true, default: semverDiffMock }));
+        const getVersionMock = jest.fn();
+        jest.doMock("../../src/services/versionService", () => ({ getVersion: getVersionMock }));
 
         const { getSummaryBody } = await import("../../src/services/summaryService");
         const result = getSummaryBody(configuration);
