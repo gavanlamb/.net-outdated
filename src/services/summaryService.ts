@@ -24,18 +24,18 @@ function getFormattedVersion(
     version: string): string
 {
     switch (difference) {
-        case "premajor":
-        case "major":
-            return `\$\\textcolor{red}{\\textsf{${version}}}\$`;
-        case "preminor":
-        case "minor":
-            return `\$\\textcolor{yellow}{\\textsf{${version}}}\$`;
-        case "prepatch":
-        case "patch":
-        case "prerelease":
-            return `\$\\textcolor{green}{\\textsf{${version}}}\$`;
-        default:
-            return version;
+    case "premajor":
+    case "major":
+        return `\$\\textcolor{red}{\\textsf{${version}}}\$`;
+    case "preminor":
+    case "minor":
+        return `\$\\textcolor{yellow}{\\textsf{${version}}}\$`;
+    case "prepatch":
+    case "patch":
+    case "prerelease":
+        return `\$\\textcolor{green}{\\textsf{${version}}}\$`;
+    default:
+        return version;
     }
 }
 

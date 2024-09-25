@@ -34,7 +34,7 @@ async function run(): Promise<void>
             .filter(project => !!project.frameworks)
             .flatMap(project => project.frameworks)
             .filter(framework => !!framework)
-            .flatMap(framework => framework!.topLevelPackages)
+            .flatMap(framework => framework.topLevelPackages)
             .filter(topLevelPackages => !!topLevelPackages)
             .length > 0;
 
