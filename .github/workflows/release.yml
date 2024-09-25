@@ -70,12 +70,6 @@ jobs:
           files: |
             dist
 
-      - name: Qodana Scan
-        uses: JetBrains/qodana-action@v2024.1
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          use-annotations: true
-
   test-action:
     name: Test Action
     runs-on: ubuntu-latest
