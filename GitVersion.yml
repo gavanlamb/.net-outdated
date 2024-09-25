@@ -2,48 +2,40 @@ assembly-versioning-format: '{Major}.{Minor}.{Patch}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}'
 assembly-informational-format: '{Major}.{Minor}.{Patch}'
 tag-prefix: v
-
-major-version-bump-message: '\+semver:\s?(breaking|major)'
-minor-version-bump-message: '\+semver:\s?(feature|minor)'
-patch-version-bump-message: '\+semver:\s?(fix|patch)'
-no-bump-message: '\+semver:\s?(none|skip)'
-
-legacy-semver-padding: 0
-build-metadata-padding: 0
-commit-message-incrementing: Disabled
+commit-message-incrementing: Enabled
+major-version-bump-message: '^(fix|feat|docs|style|refactor|test|chore|perf|build)\(GH-\d*\)!:(.*\W*)*'
+minor-version-bump-message: '^(feat|docs|style|refactor|test|chore|perf|build)\(GH-\d*\):(.*\W*)*'
+patch-version-bump-message: '^(fix)\(GH-\d*\):(.*\W*)*'
 commit-date-format: 'o'
 update-build-number: true
-
-mode: mainline
-
+mode: ContinuousDeployment
+strategies:
+  - MergeMessage
+  - TaggedCommit
 branches:
   main:
     regex: ^main$
-    increment: Minor
-    prevent-increment-of-merged-branch-version: false
-    is-mainline: true
-  hotfix:
-    regex: ^(hotfix|hf)[/]
-    source-branches:
-      - main
-    increment: Patch
+    is-main-branch: true
+    prevent-increment:
+      when-branch-merged: false
+      of-merged-branch: false
   feature:
     regex: ^(feature|feat|fix|docs|style|refactor|test|chore)[/]
-    tag: alpha
+    label: alpha
     source-branches:
       - main
       - feature
-    increment: None
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/]
-    tag: preview
+    label: preview
     source-branches:
       - main
       - feature
-      - hotfix
-    increment: None
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
-
+    label-number-pattern: '[/-](?<number>\d+)[-/]'
 ignore:
   sha: []
 merge-message-formats: {}
+increment: Inherit
+pre-release-weight: 60000
+prevent-increment:
+  when-current-commit-tagged: true

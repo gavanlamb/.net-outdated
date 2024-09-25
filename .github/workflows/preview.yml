@@ -28,7 +28,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v1.1.1
         with:
-          versionSpec: '5.x'
+          versionSpec: '6.x'
       - name: Get version
         id: get-version
         uses: gittools/actions/gitversion/execute@v1.1.1
@@ -67,12 +67,6 @@ jobs:
           fail-message: Files in the dist folder are not up-to-date. Please run 'npm run package' locally and commit the changes.
           files: |
             dist
-
-      - name: Qodana Scan
-        uses: JetBrains/qodana-action@v2024.1
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          use-annotations: true
   test-action:
     name: Test Action
     runs-on: ubuntu-latest
